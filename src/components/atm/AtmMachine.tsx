@@ -103,14 +103,14 @@ export function AtmMachine({
   const reservedHeight = baseMachineHeight * fitScale * maxCameraScale;
   const screenContentScale = isMobileViewport
     ? fitScale < 0.42
-      ? 0.84
+      ? 0.9
       : fitScale < 0.5
-        ? 0.9
+        ? 0.96
         : fitScale < 0.58
-          ? 0.96
+          ? 1.01
           : fitScale < 0.66
-            ? 1.01
-            : 1.05
+            ? 1.05
+            : 1.08
     : fitScale < 0.8
       ? 0.94
       : 1;

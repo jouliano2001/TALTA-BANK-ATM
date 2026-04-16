@@ -6,7 +6,7 @@ export const arTranslations = {
   "atm.idleOverlay.title": "اضغط على الشاشة",
   "atm.idleOverlay.subtitle": "ابدأ خدمات طلبات بنك طلتا بدون بطاقة",
   "atm.welcome.heading": "بنك أسرة سنة تالته شباب يرحب بكم",
-  "atm.welcome.subheading": "مرحبًا بكم في خدمات بنك طلتا",
+  "atm.welcome.subheading": "مرحبًا بكم في خدمات بنك تالتة",
   "atm.welcome.primaryAction": "الخدمات بدون بطاقة",
   "atm.services.heading": "برجاء اختيار الخدمة",
   "atm.services.balanceButton": "لمعرفة الرصيد الحالي",
