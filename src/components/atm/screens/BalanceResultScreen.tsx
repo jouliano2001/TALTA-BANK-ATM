@@ -1,6 +1,6 @@
 import { ArrowLeft, Landmark, Wallet } from "lucide-react";
 import { AtmActionButton } from "@/components/atm/AtmActionButton";
-import { balanceScreenContent, type Customer } from "@/data/customers";
+import { balanceScreenContent, tableHeaders, type Customer } from "@/data/customers";
 import { translate, type SupportedLanguage } from "@/content/atmContent";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +18,9 @@ export function BalanceResultScreen({
   onBack,
 }: BalanceResultScreenProps) {
   const isArabic = language === "ar";
+  const summaryRows = [
+    { label: tableHeaders.total, value: customer.total },
+  ];
 
   return (
     <div
@@ -48,7 +51,7 @@ export function BalanceResultScreen({
 
             <div className="rounded-[18px] border border-white/10 bg-white/[0.035] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-4 md:rounded-[20px]">
               <p className="text-xs font-medium text-[#c8daf9] sm:text-sm">
-                {translate(language, "atm.balanceResult.customerLabel")}
+                {tableHeaders.name}
               </p>
               <p className="mt-2 text-base font-semibold text-[#f4f8ff] sm:text-lg md:text-xl">
                 {customer.name}
@@ -57,15 +60,31 @@ export function BalanceResultScreen({
               <div className="mt-4 rounded-[16px] border border-[#7caefc]/25 bg-[linear-gradient(180deg,rgba(17,50,101,0.72),rgba(8,25,50,0.74))] p-3 sm:mt-5 sm:p-4 md:rounded-[18px]">
                 <div className="flex items-center gap-2 text-[#d7e6ff]">
                   <Wallet className="h-4 w-4 text-[#8fb9ff] sm:h-5 sm:w-5" />
-                  <span className="text-xs font-semibold sm:text-sm">
-                    {balanceScreenContent.balanceLabel}
-                  </span>
+                  <span className="text-xs font-semibold sm:text-sm">Account Summary</span>
                 </div>
-                <div className="mt-3 text-[1.55rem] font-bold text-[#f7fbff] sm:text-[1.95rem] md:mt-4 md:text-[clamp(1.5rem,3vw,2.5rem)]">
-                  {customer.balance.toFixed(2)}
-                </div>
-                <div className="mt-1 text-xs font-medium text-[#9fc2ff] sm:text-sm">
-                  {balanceScreenContent.currency}
+                <div className="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
+                  {summaryRows.map((row, index) => (
+                    <div
+                      key={row.label}
+                      className={cn(
+                        "rounded-[14px] border border-white/10 bg-white/[0.045] px-3 py-2.5 sm:px-4 sm:py-3",
+                        index === summaryRows.length - 1 &&
+                          "border-[#a7c6ff]/20 bg-[linear-gradient(180deg,rgba(29,74,145,0.34),rgba(13,37,76,0.42))]",
+                      )}
+                    >
+                      <p className="text-[11px] font-medium text-[#bcd4fb] sm:text-xs">
+                        {row.label}
+                      </p>
+                      <div className="mt-1.5 flex items-end justify-between gap-3">
+                        <p className="text-[1.12rem] font-bold text-[#f7fbff] sm:text-[1.24rem] md:text-[1.45rem]">
+                          {row.value.toFixed(2)}
+                        </p>
+                        <span className="text-[11px] font-medium text-[#9fc2ff] sm:text-xs">
+                          {balanceScreenContent.currency}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
