@@ -1,6 +1,6 @@
-import atmLogo from "@/assets/SDCY2.png";
+import atmLogo from "@/assets/SDCY1.png";
 import purchasePlaceholder from "@/assets/purchase-placeholder.svg";
-import branchSignature from "@/assets/Signature.png";
+import branchSignature from "@/assets/Signature white.png";
 import taltaBankLogo from "@/assets/Taltabanklogo.png";
 import { arTranslations } from "@/translations/ar";
 import { enTranslations } from "@/translations/en";

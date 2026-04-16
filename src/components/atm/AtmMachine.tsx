@@ -65,12 +65,12 @@ export function AtmMachine({
       layout
       initial={false}
       animate={{
-        scale: isZoomed ? 1.03 : 0.82,
+        scale: isZoomed ? 1.08 : 0.84,
         y: isZoomed ? -4 : 0,
         x: isZoomed ? -4 : 0,
       }}
       transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
-      className="relative w-full max-w-[350px] max-h-[calc(100vh-20px)] origin-center sm:max-w-[460px] sm:max-h-none md:max-w-[560px] lg:max-w-[640px] xl:max-w-[720px]"
+      className="relative w-full max-w-[372px] max-h-[calc(100vh-16px)] origin-center sm:max-w-[460px] sm:max-h-none md:max-w-[560px] lg:max-w-[640px] xl:max-w-[720px]"
     >
       <div className="relative rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,#5d6167_0%,#2e3238_18%,#11151b_68%,#070a10_100%)] p-3 shadow-[0_28px_56px_rgba(0,0,0,0.5)] sm:rounded-[34px] sm:p-4 sm:shadow-[0_45px_100px_rgba(0,0,0,0.58)]">
         <div className="absolute inset-[1px] rounded-[33px] bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_26%,transparent_56%,rgba(255,255,255,0.08)_82%,rgba(0,0,0,0.4))]" />
@@ -113,7 +113,7 @@ export function AtmMachine({
                 >
                   <ScreenGlow />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-full w-full origin-center scale-[0.84] sm:scale-[0.92] md:scale-100">
+                    <div className="h-full w-full origin-center scale-[0.9] sm:scale-[0.94] md:scale-100">
                       <AnimatePresence mode="wait">
                         {screen === "idle" && (
                           <motion.div
@@ -340,7 +340,7 @@ function KeypadPanel({ onCancel }: { onCancel: () => void }) {
           onClick={onCancel}
           className="group flex h-6 items-center justify-center overflow-hidden rounded-[6px] border border-black/40 bg-[#c84d37] px-2 py-1 font-black uppercase tracking-[0.02em] text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] transition hover:brightness-110 sm:h-7 sm:rounded-[7px] sm:px-2.5 sm:py-1.5 md:h-8 md:px-3 md:py-1.5"
         >
-          <span className="text-[4px] leading-none sm:hidden">C</span>
+          <span className="text-[4px] font-black leading-none sm:hidden">C</span>
           <span className="hidden px-1 text-[10px] font-black leading-none sm:inline sm:text-[11px]">
             {atmContent.hardware.cancelLabel}
           </span>
