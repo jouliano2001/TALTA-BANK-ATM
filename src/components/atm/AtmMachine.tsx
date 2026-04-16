@@ -65,48 +65,48 @@ export function AtmMachine({
       layout
       initial={false}
       animate={{
-        scale: isZoomed ? 1.14 : 0.9,
-        y: isZoomed ? -10 : 0,
-        x: isZoomed ? -12 : 0,
+        scale: isZoomed ? 1.03 : 0.82,
+        y: isZoomed ? -4 : 0,
+        x: isZoomed ? -4 : 0,
       }}
       transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
-      className="relative w-full max-w-[460px] origin-center sm:max-w-[560px] lg:max-w-[640px] xl:max-w-[720px]"
+      className="relative w-full max-w-[350px] max-h-[calc(100vh-20px)] origin-center sm:max-w-[460px] sm:max-h-none md:max-w-[560px] lg:max-w-[640px] xl:max-w-[720px]"
     >
-      <div className="relative rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,#5d6167_0%,#2e3238_18%,#11151b_68%,#070a10_100%)] p-4 shadow-[0_45px_100px_rgba(0,0,0,0.58)] sm:p-5">
+      <div className="relative rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,#5d6167_0%,#2e3238_18%,#11151b_68%,#070a10_100%)] p-3 shadow-[0_28px_56px_rgba(0,0,0,0.5)] sm:rounded-[34px] sm:p-4 sm:shadow-[0_45px_100px_rgba(0,0,0,0.58)]">
         <div className="absolute inset-[1px] rounded-[33px] bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_26%,transparent_56%,rgba(255,255,255,0.08)_82%,rgba(0,0,0,0.4))]" />
-        <div className="relative rounded-[28px] border border-black/40 bg-[linear-gradient(180deg,#2b2e33_0%,#141920_24%,#090d13_100%)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6 sm:pt-5">
-          <header className="mb-4 flex items-center justify-between rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#3a3e45,#191d22)] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#f4da8c] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] sm:h-12 sm:w-12">
+        <div className="relative rounded-[22px] border border-black/40 bg-[linear-gradient(180deg,#2b2e33_0%,#141920_24%,#090d13_100%)] px-3 pb-4 pt-3 sm:rounded-[28px] sm:px-4 sm:pb-5 sm:pt-4 md:px-5 md:pb-6 md:pt-5">
+          <header className="mb-3 flex items-center justify-between rounded-[14px] border border-white/12 bg-[linear-gradient(180deg,#3a3e45,#191d22)] px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] sm:mb-4 sm:rounded-[16px] sm:px-4 sm:py-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#f4da8c] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] sm:h-11 sm:w-11 sm:rounded-xl md:h-12 md:w-12">
                 <img
                   src={atmContent.logo.image}
                   alt={atmContent.logo.alt}
                   className="h-full w-full object-contain p-1"
                 />
               </div>
-              <div className="font-atm text-[clamp(1.2rem,2.3vw,1.8rem)] font-semibold uppercase tracking-[0.18em] text-[#ecf2ff]">
+              <div className="font-atm text-[0.95rem] font-semibold uppercase tracking-[0.14em] text-[#ecf2ff] sm:text-[clamp(1.1rem,2.2vw,1.55rem)] sm:tracking-[0.18em]">
                 ATM
               </div>
             </div>
-            <div className="flex h-12 items-center justify-end sm:h-14">
+            <div className="flex h-9 items-center justify-end sm:h-12 md:h-14">
               <img
                 src={atmContent.bankLogo.image}
                 alt={atmContent.bankLogo.alt}
-                className="h-full w-auto max-w-[162px] object-contain sm:max-w-[190px]"
+                className="h-full w-auto max-w-[118px] object-contain sm:max-w-[162px] md:max-w-[190px]"
               />
             </div>
           </header>
 
-          <div className="relative rounded-[24px] border border-white/8 bg-[linear-gradient(180deg,#26292e,#090c11)] p-3 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05),0_24px_44px_rgba(0,0,0,0.42)] sm:p-4">
-            <div className="flex items-stretch gap-2 sm:gap-3">
+          <div className="relative rounded-[20px] border border-white/8 bg-[linear-gradient(180deg,#26292e,#090c11)] p-2.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05),0_18px_34px_rgba(0,0,0,0.36)] sm:rounded-[24px] sm:p-3 md:p-4">
+            <div className="flex items-stretch gap-1.5 sm:gap-2 md:gap-3">
               <MachineSideButtons side="left" />
 
-              <div className="relative min-w-0 flex-1 rounded-[18px] border border-black/60 bg-[linear-gradient(180deg,#11161f,#060a12)] p-[10px] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]">
-                <div className="absolute inset-[10px] rounded-[14px] border border-white/5 bg-[linear-gradient(135deg,rgba(255,255,255,0.09),transparent_26%,transparent_74%,rgba(255,255,255,0.04))]" />
+              <div className="relative min-w-0 flex-1 rounded-[15px] border border-black/60 bg-[linear-gradient(180deg,#11161f,#060a12)] p-[8px] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)] sm:rounded-[18px] sm:p-[10px]">
+                <div className="absolute inset-[8px] rounded-[12px] border border-white/5 bg-[linear-gradient(135deg,rgba(255,255,255,0.09),transparent_26%,transparent_74%,rgba(255,255,255,0.04))] sm:inset-[10px] sm:rounded-[14px]" />
                 <div
                   onClick={screen === "idle" ? onScreenClick : undefined}
                   className={cn(
-                    "relative flex aspect-[1.34/1] w-full overflow-hidden rounded-[12px] border border-[#18325f] bg-[radial-gradient(circle_at_top,rgba(33,70,129,0.45),transparent_38%),linear-gradient(180deg,#04142f_0%,#071021_54%,#07172c_100%)] text-left shadow-[inset_0_0_22px_rgba(87,145,255,0.12)]",
+                    "relative flex aspect-[1.18/1] w-full overflow-hidden rounded-[10px] border border-[#18325f] bg-[radial-gradient(circle_at_top,rgba(33,70,129,0.45),transparent_38%),linear-gradient(180deg,#04142f_0%,#071021_54%,#07172c_100%)] text-left shadow-[inset_0_0_22px_rgba(87,145,255,0.12)] sm:aspect-[1.24/1] md:aspect-[1.34/1] sm:rounded-[12px]",
                     screen === "idle" &&
                       "cursor-pointer transition duration-300 hover:border-[#6ca9ff] hover:shadow-[0_0_0_1px_rgba(108,169,255,0.32),inset_0_0_34px_rgba(95,155,255,0.18)]",
                   )}
@@ -233,7 +233,7 @@ export function AtmMachine({
           <motion.div
             animate={{ opacity: isZoomed ? 1 : 0.88, y: isZoomed ? 0 : 14 }}
             transition={{ duration: 0.6, delay: isZoomed ? 0.2 : 0 }}
-            className="mt-5 grid grid-cols-[1fr_1.4fr_1fr] gap-3 sm:gap-4"
+            className="mt-3 grid grid-cols-[0.92fr_1.18fr_0.92fr] gap-2 sm:mt-5 sm:grid-cols-[1fr_1.25fr_1fr] sm:gap-3 md:grid-cols-[1fr_1.4fr_1fr] md:gap-4"
           >
             <HardwarePanel
               title={atmContent.hardware.contactless}
@@ -247,11 +247,11 @@ export function AtmMachine({
             </div>
           </motion.div>
 
-          <div className="mt-5 rounded-[18px] border border-white/6 bg-[linear-gradient(180deg,#262a31,#0f141b)] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-            <div className="mx-auto h-3 w-28 rounded-full bg-black/45 shadow-[inset_0_1px_2px_rgba(255,255,255,0.08)] sm:w-36" />
+          <div className="mt-3 rounded-[16px] border border-white/6 bg-[linear-gradient(180deg,#262a31,#0f141b)] px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:mt-5 sm:rounded-[18px] sm:px-4 sm:py-4">
+            <div className="mx-auto h-2.5 w-24 rounded-full bg-black/45 shadow-[inset_0_1px_2px_rgba(255,255,255,0.08)] sm:h-3 sm:w-28 md:w-36" />
           </div>
 
-          <div className="mx-auto mt-3 h-5 w-[86%] rounded-b-[20px] border border-white/5 bg-[linear-gradient(180deg,#1b1f25,#090d13)]" />
+          <div className="mx-auto mt-2 h-4 w-[86%] rounded-b-[16px] border border-white/5 bg-[linear-gradient(180deg,#1b1f25,#090d13)] sm:mt-3 sm:h-5 sm:rounded-b-[20px]" />
         </div>
       </div>
     </motion.div>
@@ -270,12 +270,12 @@ function ScreenGlow() {
 
 function MachineSideButtons({ side }: { side: "left" | "right" }) {
   return (
-    <div className="flex w-[24px] shrink-0 flex-col justify-center gap-4 sm:w-[28px] sm:gap-5">
+    <div className="flex w-[18px] shrink-0 flex-col justify-center gap-3 sm:w-[22px] sm:gap-4 md:w-[28px] md:gap-5">
       {Array.from({ length: 4 }).map((_, index) => (
         <div
           key={`${side}-${index}`}
           className={cn(
-            "h-4 rounded-[4px] border border-white/18 bg-[linear-gradient(180deg,#f7f8fb,#b6bcc7_48%,#737c88)] shadow-[0_2px_6px_rgba(0,0,0,0.25)] sm:h-5",
+            "h-3 rounded-[4px] border border-white/18 bg-[linear-gradient(180deg,#f7f8fb,#b6bcc7_48%,#737c88)] shadow-[0_2px_6px_rgba(0,0,0,0.25)] sm:h-4 md:h-5",
             side === "left" ? "origin-left" : "origin-right",
           )}
         />
@@ -294,15 +294,15 @@ function HardwarePanel({
   label: string;
 }) {
   return (
-    <div className="flex min-h-[105px] flex-col justify-between rounded-[16px] border border-white/7 bg-[linear-gradient(180deg,#262a31,#11161d)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:min-h-[122px] sm:p-4">
-      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/70 sm:text-[10px]">
+    <div className="flex min-h-[88px] flex-col justify-between rounded-[14px] border border-white/7 bg-[linear-gradient(180deg,#262a31,#11161d)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:min-h-[105px] sm:rounded-[16px] sm:p-3 md:min-h-[122px] md:p-4">
+      <span className="text-[8px] font-semibold uppercase tracking-[0.15em] text-white/70 sm:text-[9px] md:text-[10px] md:tracking-[0.2em]">
         {title}
       </span>
       <div className="flex flex-col items-center gap-2 text-center">
-        <div className="flex h-14 w-full items-center justify-center rounded-[14px] border border-white/8 bg-black/22">
+        <div className="flex h-11 w-full items-center justify-center rounded-[12px] border border-white/8 bg-black/22 sm:h-12 sm:rounded-[14px] md:h-14">
           {icon}
         </div>
-        <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/55 sm:text-[10px]">
+        <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/55 sm:text-[9px] md:text-[10px] md:tracking-[0.16em]">
           {label}
         </span>
       </div>
@@ -314,13 +314,13 @@ function KeypadPanel({ onCancel }: { onCancel: () => void }) {
   const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", ""];
 
   return (
-    <div className="rounded-[18px] border border-white/7 bg-[linear-gradient(180deg,#252a30,#121821)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-4">
-      <div className="grid grid-cols-3 gap-2">
+    <div className="rounded-[16px] border border-white/7 bg-[linear-gradient(180deg,#252a30,#121821)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[18px] sm:p-3 md:p-4">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
         {keys.map((key, index) => (
           <div
             key={`${key}-${index}`}
             className={cn(
-              "flex h-8 items-center justify-center rounded-[7px] border text-xs font-semibold sm:h-9 sm:text-sm",
+              "flex h-7 items-center justify-center rounded-[6px] border text-[10px] font-semibold sm:h-8 sm:rounded-[7px] sm:text-xs md:h-9 md:text-sm",
               key
                 ? "border-black/45 bg-[linear-gradient(180deg,#f5f5f7,#9aa1ac)] text-[#222831] shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                 : "border-transparent bg-transparent shadow-none",
@@ -330,11 +330,11 @@ function KeypadPanel({ onCancel }: { onCancel: () => void }) {
           </div>
         ))}
       </div>
-      <div className="mt-2 grid grid-cols-3 gap-2">
+      <div className="mt-1.5 grid grid-cols-3 gap-1.5 sm:mt-2 sm:gap-2">
         <button
           type="button"
           onClick={onCancel}
-          className="group flex h-7 items-center justify-center overflow-hidden rounded-[7px] border border-black/40 bg-[#c84d37] px-2.5 py-1.5 text-[4.5px] font-black uppercase tracking-[0.02em] text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] transition hover:brightness-110 sm:h-8 sm:px-3 sm:py-1.5 sm:text-[5.5px]"
+          className="group flex h-6 items-center justify-center overflow-hidden rounded-[6px] border border-black/40 bg-[#c84d37] px-2 py-1 text-[4px] font-black uppercase tracking-[0.02em] text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] transition hover:brightness-110 sm:h-7 sm:rounded-[7px] sm:px-2.5 sm:py-1.5 sm:text-[4.5px] md:h-8 md:px-3 md:py-1.5 md:text-[5.5px]"
         >
           <span className="scale-[0.72] leading-none">{atmContent.hardware.cancelLabel}</span>
         </button>
@@ -396,16 +396,16 @@ function IdleScreen({ language }: { language: SupportedLanguage }) {
             className="max-h-[60%] w-auto max-w-[70%] object-contain object-center drop-shadow-[0_14px_24px_rgba(94,67,9,0.2)]"
           />
         </div>
-        <div className="absolute bottom-4 right-4 max-w-[66%] rounded-2xl border border-[#a97e1b]/35 bg-[linear-gradient(180deg,rgba(255,247,221,0.82),rgba(244,221,152,0.92))] px-3 py-2 text-[#5f490f] shadow-[0_10px_20px_rgba(126,88,12,0.16)] sm:bottom-5 sm:right-5 sm:px-4">
+        <div className="absolute bottom-2 right-2 max-w-[74%] rounded-[18px] border border-[#a97e1b]/35 bg-[linear-gradient(180deg,rgba(255,247,221,0.82),rgba(244,221,152,0.92))] px-2.5 py-2 text-[#5f490f] shadow-[0_10px_20px_rgba(126,88,12,0.16)] sm:bottom-4 sm:right-4 sm:max-w-[66%] sm:rounded-2xl sm:px-3 md:bottom-5 md:right-5 md:px-4">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#9f7718]/30 bg-white/35">
-              <MousePointerClick className="h-3.5 w-3.5 text-[#6a5011]" />
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#9f7718]/30 bg-white/35 sm:h-7 sm:w-7">
+              <MousePointerClick className="h-3 w-3 text-[#6a5011] sm:h-3.5 sm:w-3.5" />
             </div>
             <div className="flex min-w-0 flex-col">
-              <span className="text-left text-[9px] font-semibold uppercase leading-tight tracking-[0.16em] sm:text-[10px]">
+              <span className="text-left text-[8px] font-semibold uppercase leading-tight tracking-[0.12em] sm:text-[9px] md:text-[10px] md:tracking-[0.16em]">
                 {translate(language, "atm.idleOverlay.title")}
               </span>
-              <span className="text-left text-[8px] leading-tight text-[#6f5a22] sm:text-[9px]">
+              <span className="text-left text-[7px] leading-tight text-[#6f5a22] sm:text-[8px] md:text-[9px]">
                 {translate(language, "atm.idleOverlay.subtitle")}
               </span>
             </div>
@@ -423,14 +423,14 @@ function LanguageScreen({
 }) {
   return (
     <div className="flex h-full flex-col justify-center overflow-hidden px-5 py-5 text-center sm:px-6 sm:py-6">
-      <div className="mx-auto w-full max-w-[360px] rounded-[20px] border border-white/10 bg-black/18 px-5 py-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-        <p className="font-arabic text-lg font-semibold text-[#f4f8ff] sm:text-xl">
+      <div className="mx-auto w-full max-w-[310px] rounded-[18px] border border-white/10 bg-black/18 px-4 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:max-w-[360px] sm:rounded-[20px] sm:px-5 sm:py-6">
+        <p className="font-arabic text-base font-semibold text-[#f4f8ff] sm:text-lg md:text-xl">
           {translate("ar", "atm.language.title")}
         </p>
-        <p className="mt-2 text-lg font-semibold text-[#d7e6ff] sm:text-xl">
+        <p className="mt-2 text-base font-semibold text-[#d7e6ff] sm:text-lg md:text-xl">
           {translate("en", "atm.language.subtitle")}
         </p>
-        <div className="mt-6 grid gap-3">
+        <div className="mt-5 grid gap-2.5 sm:mt-6 sm:gap-3">
           <AtmActionButton type="button" onClick={() => onSelectLanguage("en")}>
             {translate("en", "atm.language.english")}
           </AtmActionButton>
@@ -459,16 +459,16 @@ function WelcomeScreen({
   return (
     <div
       className={cn(
-        "flex h-full flex-col overflow-hidden px-4 py-4 sm:px-5 sm:py-5",
+        "flex h-full flex-col overflow-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-5",
         isArabic && "font-arabic",
       )}
       dir={isArabic ? "rtl" : "ltr"}
     >
       <div className="flex flex-1 flex-col items-center justify-center text-center">
-        <p className="max-w-[420px] text-[clamp(0.95rem,2vw,1.5rem)] font-semibold leading-snug text-[#f4f8ff]">
+        <p className="max-w-[300px] text-[0.95rem] font-semibold leading-snug text-[#f4f8ff] sm:max-w-[360px] sm:text-[1.05rem] md:max-w-[420px] md:text-[clamp(0.95rem,2vw,1.5rem)]">
           {translate(language, "atm.welcome.heading")}
         </p>
-        <p className="mt-4 max-w-[430px] text-[clamp(0.9rem,1.9vw,1.3rem)] font-medium leading-snug text-[#d7e6ff]">
+        <p className="mt-3 max-w-[300px] text-[0.82rem] font-medium leading-snug text-[#d7e6ff] sm:mt-4 sm:max-w-[360px] sm:text-[0.95rem] md:max-w-[430px] md:text-[clamp(0.9rem,1.9vw,1.3rem)]">
           {translate(language, "atm.welcome.subheading")}
         </p>
       </div>
@@ -476,7 +476,7 @@ function WelcomeScreen({
         <AtmActionButton
           type="button"
           tone="screen"
-          className="min-w-[170px] max-w-full sm:min-w-[210px]"
+          className="min-w-[145px] max-w-full sm:min-w-[170px] md:min-w-[210px]"
           onClick={onPrimaryAction}
         >
           {translate(language, "atm.welcome.primaryAction")}
@@ -500,16 +500,16 @@ function ServicesScreen({
   return (
     <div
       className={cn(
-        "flex h-full flex-col overflow-hidden px-4 py-4 sm:px-5 sm:py-5",
+        "flex h-full flex-col overflow-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-5",
         isArabic && "font-arabic",
       )}
       dir={isArabic ? "rtl" : "ltr"}
     >
       <div className="flex flex-1 flex-col justify-center">
-        <h2 className="text-center text-[clamp(1.05rem,2.3vw,1.8rem)] font-bold text-[#f2f6ff]">
+        <h2 className="text-center text-[0.98rem] font-bold text-[#f2f6ff] sm:text-[1.15rem] md:text-[clamp(1.05rem,2.3vw,1.8rem)]">
           {translate(language, "atm.services.heading")}
         </h2>
-        <div className="mx-auto mt-6 flex w-full max-w-[430px] flex-col gap-3 sm:mt-8 sm:gap-4">
+        <div className="mx-auto mt-4 flex w-full max-w-[320px] flex-col gap-2.5 sm:mt-6 sm:max-w-[380px] sm:gap-3 md:mt-8 md:max-w-[430px] md:gap-4">
           <AtmActionButton
             type="button"
             icon={<CreditCard className="h-6 w-6" />}

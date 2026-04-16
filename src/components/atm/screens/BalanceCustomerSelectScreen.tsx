@@ -46,13 +46,13 @@ export function BalanceCustomerSelectScreen({
   return (
     <div
       className={cn(
-        "flex h-full flex-col overflow-hidden px-3 py-3 sm:px-4 sm:py-4",
+        "flex h-full min-h-0 flex-col overflow-hidden px-2.5 py-2.5 sm:px-3 sm:py-3 md:px-4 md:py-4",
         isArabic && "font-arabic",
       )}
       dir={isArabic ? "rtl" : "ltr"}
     >
       <div className={cn("flex items-start", isArabic ? "justify-start" : "justify-end")}>
-        <AtmActionButton type="button" tone="ghost" className="min-w-[104px]" onClick={onBack}>
+        <AtmActionButton type="button" tone="ghost" className="min-w-[92px] sm:min-w-[104px]" onClick={onBack}>
           <span className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" />
             {translate(language, "atm.backButton")}
@@ -61,12 +61,12 @@ export function BalanceCustomerSelectScreen({
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col justify-center">
-        <h2 className="text-center text-[clamp(1rem,2.1vw,1.55rem)] font-bold text-[#f2f6ff]">
+        <h2 className="text-center text-[0.96rem] font-bold text-[#f2f6ff] sm:text-[1.05rem] md:text-[clamp(1rem,2.1vw,1.55rem)]">
           {translate(language, "atm.balanceSelect.heading")}
         </h2>
 
-        <div className="mx-auto mt-4 w-full max-w-[470px] rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(7,21,44,0.74),rgba(4,11,24,0.9))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:mt-5 sm:p-5">
-          <label className="mb-3 flex items-center gap-2 text-sm font-medium text-[#cfe0ff]">
+        <div className="mx-auto mt-3 w-full max-w-[300px] rounded-[18px] border border-white/10 bg-[linear-gradient(180deg,rgba(7,21,44,0.74),rgba(4,11,24,0.9))] p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:mt-4 sm:max-w-[390px] sm:rounded-[20px] sm:p-4 md:mt-5 md:max-w-[470px] md:rounded-[22px] md:p-5">
+          <label className="mb-2.5 flex items-center gap-2 text-xs font-medium text-[#cfe0ff] sm:mb-3 sm:text-sm">
             <UserRound className="h-4 w-4 text-[#8fb9ff]" />
             {translate(language, "atm.balanceSelect.fieldLabel")}
           </label>
@@ -76,7 +76,7 @@ export function BalanceCustomerSelectScreen({
               type="button"
               onClick={() => setIsOpen((open) => !open)}
               className={cn(
-                "flex h-14 w-full items-center rounded-[18px] border border-[#6ea7ff]/35 bg-[linear-gradient(180deg,rgba(12,33,67,0.98),rgba(6,18,38,0.98))] text-base text-[#f4f8ff] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none transition hover:border-[#87b7ff]/55 focus-visible:border-[#8db9ff] focus-visible:shadow-[0_0_0_1px_rgba(141,185,255,0.4)]",
+                "flex h-12 w-full items-center rounded-[16px] border border-[#6ea7ff]/35 bg-[linear-gradient(180deg,rgba(12,33,67,0.98),rgba(6,18,38,0.98))] text-sm text-[#f4f8ff] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none transition hover:border-[#87b7ff]/55 focus-visible:border-[#8db9ff] focus-visible:shadow-[0_0_0_1px_rgba(141,185,255,0.4)] sm:h-13 sm:text-[15px] md:h-14 md:rounded-[18px] md:text-base",
                 isArabic
                   ? "justify-between pr-4 pl-3 text-right"
                   : "justify-between pl-4 pr-3 text-left",
@@ -88,15 +88,15 @@ export function BalanceCustomerSelectScreen({
               </span>
               <ChevronDown
                 className={cn(
-                  "h-5 w-5 shrink-0 text-[#8fb9ff] transition-transform duration-200",
+                  "h-4 w-4 shrink-0 text-[#8fb9ff] transition-transform duration-200 sm:h-5 sm:w-5",
                   isOpen && "rotate-180",
                 )}
               />
             </button>
 
             {isOpen && (
-              <div className="absolute inset-x-0 top-[calc(100%+10px)] z-20 overflow-hidden rounded-[18px] border border-[#6ea7ff]/30 bg-[linear-gradient(180deg,rgba(8,24,48,0.98),rgba(4,12,26,0.99))] shadow-[0_18px_32px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.05)]">
-                <div className="atm-scrollbar max-h-[168px] overflow-y-auto p-2">
+              <div className="absolute inset-x-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-[16px] border border-[#6ea7ff]/30 bg-[linear-gradient(180deg,rgba(8,24,48,0.98),rgba(4,12,26,0.99))] shadow-[0_18px_32px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.05)] md:top-[calc(100%+10px)] md:rounded-[18px]">
+                <div className="atm-scrollbar max-h-[146px] overflow-y-auto p-1.5 sm:max-h-[160px] sm:p-2 md:max-h-[168px]">
                   {customers.map((customer) => {
                     const isSelected = customer.id === selectedCustomerId;
 
@@ -109,7 +109,7 @@ export function BalanceCustomerSelectScreen({
                           setIsOpen(false);
                         }}
                         className={cn(
-                          "flex w-full items-center justify-between rounded-[14px] px-3 py-3 text-sm transition",
+                          "flex w-full items-center justify-between rounded-[12px] px-2.5 py-2.5 text-xs transition sm:rounded-[13px] sm:text-sm md:rounded-[14px]",
                           isArabic ? "text-right" : "text-left",
                           isSelected
                             ? "bg-[linear-gradient(180deg,rgba(37,92,180,0.9),rgba(17,50,110,0.94))] text-white"
@@ -126,11 +126,11 @@ export function BalanceCustomerSelectScreen({
             )}
           </div>
 
-          <div className={cn("mt-5 flex", isArabic ? "justify-start" : "justify-end")}>
+          <div className={cn("mt-4 flex", isArabic ? "justify-start" : "justify-end")}>
             <AtmActionButton
               type="button"
               tone="screen"
-              className="min-w-[150px]"
+              className="min-w-[126px] sm:min-w-[150px]"
               onClick={onConfirm}
               disabled={selectedCustomerId === null}
             >
