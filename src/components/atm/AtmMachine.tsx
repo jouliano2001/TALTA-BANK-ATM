@@ -657,12 +657,18 @@ function PurchaseScreen({
   onBack: () => void;
 }) {
   return (
-    <div className="relative flex h-full flex-col overflow-hidden p-3 sm:p-4">
-      <img
-        src={atmContent.purchase.image}
-        alt={atmContent.purchase.alt}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      <div className="relative flex h-full flex-col overflow-hidden p-3 sm:p-4">
+        <video
+        className="absolute inset-0 h-full w-full bg-black object-contain"
+          autoPlay
+          muted
+          loop
+        playsInline
+        preload="auto"
+        aria-label={atmContent.purchase.alt}
+      >
+        <source src={atmContent.purchase.video} type="video/mp4" />
+      </video>
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,12,26,0.58),rgba(4,12,26,0.12),rgba(4,12,26,0.62))]" />
       <div className={cn("relative flex items-start gap-3", isArabic ? "justify-start" : "justify-end")}>
         <AtmActionButton

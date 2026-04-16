@@ -2,6 +2,7 @@ import atmLogo from "@/assets/SDCY1.png";
 import purchasePlaceholder from "@/assets/purchase-placeholder.svg";
 import branchSignature from "@/assets/Signature white.png";
 import taltaBankLogo from "@/assets/Taltabanklogo.png";
+import purchaseVideo from "@/assets/video.mp4";
 import { arTranslations } from "@/translations/ar";
 import { enTranslations } from "@/translations/en";
 
@@ -38,6 +39,7 @@ export const atmContent = {
   },
   purchase: {
     image: purchasePlaceholder,
+    video: purchaseVideo,
     alt: "Placeholder purchase and bidding image",
   },
 } as const;

@@ -20,6 +20,6 @@ export const enTranslations = {
   "atm.balanceResult.customerLabel": "Customer name",
   "atm.backButton": "Back",
   "atm.contactlessLabel": "Contactless",
-  "atm.purchase.captionLabel": "PLACEHOLDER IMAGE",
-  "atm.purchase.caption": "Replace the purchase and bidding image from the assets folder any time.",
+  "atm.purchase.captionLabel": "Uncle Elia:",
+  "atm.purchase.caption": "Move from here my son don't eat my head.",
 } as const;

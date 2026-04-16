@@ -6,7 +6,7 @@ export const arTranslations = {
   "atm.idleOverlay.title": "اضغط على الشاشة",
   "atm.idleOverlay.subtitle": "ابدأ خدمات طلبات بنك طلتا بدون بطاقة",
   "atm.welcome.heading": "بنك أسرة سنة تالته شباب يرحب بكم",
-  "atm.welcome.subheading": "مرحبًا بكم في خدمات بنك تالتة",
+  "atm.welcome.subheading": "مرحبًا بكم في خدمات بنك تالته",
   "atm.welcome.primaryAction": "الخدمات بدون بطاقة",
   "atm.services.heading": "برجاء اختيار الخدمة",
   "atm.services.balanceButton": "لمعرفة الرصيد الحالي",
@@ -20,6 +20,6 @@ export const arTranslations = {
   "atm.balanceResult.customerLabel": "اسم العميل",
   "atm.backButton": "الرجوع",
   "atm.contactlessLabel": "بدون تلامس",
-  "atm.purchase.captionLabel": "صورة مؤقتة",
-  "atm.purchase.caption": "استبدل صورة الشراء و المناهده من مجلد assets متى شئت",
+  "atm.purchase.captionLabel": "أنكل أيليا :",
+  "atm.purchase.caption": "أمشي يا ابني من هنا ماتاكلش دماغي",
 } as const;
