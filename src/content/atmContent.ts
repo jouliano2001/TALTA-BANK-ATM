@@ -1,4 +1,5 @@
 import atmLogo from "@/assets/SDCY1.png";
+import welcomeLogo from "@/assets/SDCY2.png";
 import purchasePlaceholder from "@/assets/purchase-placeholder.svg";
 import branchSignature from "@/assets/Signature white.png";
 import taltaBankLogo from "@/assets/Taltabanklogo.png";
@@ -22,6 +23,10 @@ export const atmContent = {
   logo: {
     image: atmLogo,
     alt: "Talta ATM logo",
+  },
+  welcomeLogo: {
+    image: welcomeLogo,
+    alt: "Talta ATM welcome logo",
   },
   bankLogo: {
     image: taltaBankLogo,

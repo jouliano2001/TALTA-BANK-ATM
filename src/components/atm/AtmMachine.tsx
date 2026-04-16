@@ -2,7 +2,9 @@ import { useEffect, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
+  Banknote,
   CreditCard,
+  LoaderCircle,
   MousePointerClick,
   ShoppingCart,
   Waves,
@@ -12,6 +14,7 @@ import { BalanceCustomerSelectScreen } from "@/components/atm/screens/BalanceCus
 import { BalanceResultScreen } from "@/components/atm/screens/BalanceResultScreen";
 import { atmContent, translate, type SupportedLanguage } from "@/content/atmContent";
 import { customers, type Customer } from "@/data/customers";
+import { playAtmClickSound } from "@/lib/atmClickSound";
 import { cn } from "@/lib/utils";
 
 type FlowScreen =
@@ -20,6 +23,7 @@ type FlowScreen =
   | "welcome"
   | "services"
   | "balance-select"
+  | "balance-loading"
   | "balance-result"
   | "purchase";
 
@@ -27,6 +31,7 @@ type AtmMachineProps = {
   screen: FlowScreen;
   language: SupportedLanguage;
   isZoomed: boolean;
+  balanceLoadingDurationMs: number;
   selectedCustomerId: number | null;
   selectedCustomer: Customer | null;
   onScreenClick: () => void;
@@ -45,6 +50,7 @@ export function AtmMachine({
   screen,
   language,
   isZoomed,
+  balanceLoadingDurationMs,
   selectedCustomerId,
   selectedCustomer,
   onScreenClick,
@@ -277,6 +283,21 @@ export function AtmMachine({
                             />
                           </motion.div>
                         )}
+                        {screen === "balance-loading" && (
+                          <motion.div
+                            key="balance-loading"
+                            initial={{ opacity: 0, x: 26 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -26 }}
+                            transition={{ duration: 0.38 }}
+                            className="absolute inset-0"
+                          >
+                            <BalanceLoadingScreen
+                              language={language}
+                              durationMs={balanceLoadingDurationMs}
+                            />
+                          </motion.div>
+                        )}
                         {screen === "purchase" && (
                           <motion.div
                             key="purchase"
@@ -458,7 +479,14 @@ function KeypadActionButton({
 
   if (onClick) {
     return (
-      <button type="button" onClick={onClick} className={sharedClassName}>
+      <button
+        type="button"
+        onClick={() => {
+          void playAtmClickSound();
+          onClick();
+        }}
+        className={sharedClassName}
+      >
         {content}
       </button>
     );
@@ -574,15 +602,20 @@ function WelcomeScreen({
         isArabic && "font-arabic",
       )}
       dir={isArabic ? "rtl" : "ltr"}
-    >
-      <div className="flex flex-1 flex-col items-center justify-center text-center">
-        <p className="max-w-[300px] text-[0.95rem] font-semibold leading-snug text-[#f4f8ff] sm:max-w-[360px] sm:text-[1.05rem] md:max-w-[420px] md:text-[clamp(0.95rem,2vw,1.5rem)]">
-          {translate(language, "atm.welcome.heading")}
-        </p>
-        <p className="mt-3 max-w-[300px] text-[0.82rem] font-medium leading-snug text-[#d7e6ff] sm:mt-4 sm:max-w-[360px] sm:text-[0.95rem] md:max-w-[430px] md:text-[clamp(0.9rem,1.9vw,1.3rem)]">
-          {translate(language, "atm.welcome.subheading")}
-        </p>
-      </div>
+      >
+        <div className="flex flex-1 flex-col items-center justify-center text-center">
+          <img
+            src={atmContent.welcomeLogo.image}
+            alt={atmContent.welcomeLogo.alt}
+            className="mb-4 h-auto max-h-[74px] w-auto max-w-[145px] object-contain sm:mb-5 sm:max-h-[88px] sm:max-w-[170px] md:max-h-[102px] md:max-w-[190px]"
+          />
+          <p className="max-w-[320px] text-[1.08rem] font-semibold leading-snug text-[#f4f8ff] sm:max-w-[390px] sm:text-[1.22rem] md:max-w-[460px] md:text-[clamp(1.15rem,2.35vw,1.8rem)]">
+            {translate(language, "atm.welcome.heading")}
+          </p>
+          <p className="mt-3 max-w-[320px] text-[0.94rem] font-medium leading-snug text-[#d7e6ff] sm:mt-4 sm:max-w-[390px] sm:text-[1.04rem] md:max-w-[460px] md:text-[clamp(0.98rem,2vw,1.4rem)]">
+            {translate(language, "atm.welcome.subheading")}
+          </p>
+        </div>
       <div className={cn("flex", isArabic ? "justify-start" : "justify-end")}>
         <AtmActionButton
           type="button"
@@ -696,6 +729,49 @@ function PurchaseScreen({
         <p className="mt-2 text-base font-semibold text-[#f6f9ff] sm:text-lg">
           {translate(language, "atm.purchase.caption")}
         </p>
+      </div>
+    </div>
+  );
+}
+
+function BalanceLoadingScreen({
+  language,
+  durationMs,
+}: {
+  language: SupportedLanguage;
+  durationMs: number;
+}) {
+  const isArabic = language === "ar";
+
+  return (
+    <div
+      className={cn(
+        "flex h-full flex-col justify-center overflow-hidden px-4 py-4 sm:px-5 sm:py-5",
+        isArabic && "font-arabic",
+      )}
+      dir={isArabic ? "rtl" : "ltr"}
+    >
+      <div className="mx-auto flex w-full max-w-[320px] flex-col items-center rounded-[22px] border border-[#7caefc]/20 bg-[linear-gradient(180deg,rgba(7,21,44,0.9),rgba(4,11,24,0.96))] px-4 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_18px_38px_rgba(0,0,0,0.28)] sm:max-w-[380px] sm:px-5 sm:py-6">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[#8fb9ff]/30 bg-[radial-gradient(circle_at_top,rgba(109,167,255,0.28),rgba(15,37,72,0.9))] shadow-[0_0_30px_rgba(84,140,240,0.16)] sm:h-16 sm:w-16">
+          <Banknote className="h-6 w-6 text-[#dce8ff] sm:h-7 sm:w-7" />
+        </div>
+        <div className="mt-4 flex items-center gap-2 text-[#f4f8ff]">
+          <LoaderCircle className="h-4 w-4 animate-spin text-[#8fb9ff] sm:h-5 sm:w-5" />
+          <p className="text-[1rem] font-semibold sm:text-[1.08rem] md:text-[1.16rem]">
+            {translate(language, "atm.balanceLoading.title")}
+          </p>
+        </div>
+        <p className="mt-3 max-w-[280px] text-[0.86rem] leading-relaxed text-[#d7e6ff] sm:max-w-[320px] sm:text-[0.94rem] md:text-[1rem]">
+          {translate(language, "atm.balanceLoading.subtitle")}
+        </p>
+        <div className="mt-5 h-2.5 w-full overflow-hidden rounded-full border border-[#7caefc]/20 bg-[#071327]">
+          <motion.div
+            className="h-full rounded-full bg-[linear-gradient(90deg,#75aaff,#c4ddff)] shadow-[0_0_12px_rgba(117,170,255,0.45)]"
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ duration: durationMs / 1000, ease: "linear" }}
+          />
+        </div>
       </div>
     </div>
   );

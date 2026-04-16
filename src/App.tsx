@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AtmMachine } from "@/components/atm/AtmMachine";
 import { customers } from "@/data/customers";
 import { type SupportedLanguage } from "@/content/atmContent";
+import {
+  getCashWithdrawalDurationMs,
+  playCashWithdrawalSound,
+  stopCashWithdrawalSound,
+} from "@/lib/atmClickSound";
 
 type FlowScreen =
   | "idle"
@@ -9,6 +14,7 @@ type FlowScreen =
   | "welcome"
   | "services"
   | "balance-select"
+  | "balance-loading"
   | "balance-result"
   | "purchase";
 
@@ -18,12 +24,33 @@ function App() {
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
     customers[0]?.id ?? null,
   );
+  const [balanceLoadingDurationMs, setBalanceLoadingDurationMs] = useState(4200);
+  const balanceLoadingTimeoutRef = useRef<number | null>(null);
+  const balanceLoadingSessionRef = useRef(0);
 
   const isZoomed = screen !== "idle";
   const selectedCustomer =
     customers.find((customer) => customer.id === selectedCustomerId) ?? null;
 
+  const clearBalanceLoading = () => {
+    balanceLoadingSessionRef.current += 1;
+
+    if (balanceLoadingTimeoutRef.current !== null) {
+      window.clearTimeout(balanceLoadingTimeoutRef.current);
+      balanceLoadingTimeoutRef.current = null;
+    }
+
+    stopCashWithdrawalSound();
+  };
+
+  useEffect(() => {
+    void getCashWithdrawalDurationMs().then(setBalanceLoadingDurationMs);
+
+    return () => clearBalanceLoading();
+  }, []);
+
   const handleCancel = () => {
+    clearBalanceLoading();
     setLanguage("ar");
     setSelectedCustomerId(customers[0]?.id ?? null);
     setScreen("idle");
@@ -48,16 +75,42 @@ function App() {
             onPrimaryAction={() => setScreen("services")}
             onBalanceAction={() => setScreen("balance-select")}
             onPurchaseAction={() => setScreen("purchase")}
-            onBackToServices={() => setScreen("services")}
+            onBackToServices={() => {
+              clearBalanceLoading();
+              setScreen("services");
+            }}
             selectedCustomer={selectedCustomer}
+            balanceLoadingDurationMs={balanceLoadingDurationMs}
             selectedCustomerId={selectedCustomerId}
             onSelectCustomer={setSelectedCustomerId}
-            onConfirmCustomerBalance={() => {
+            onConfirmCustomerBalance={async () => {
               if (selectedCustomerId !== null) {
-                setScreen("balance-result");
+                clearBalanceLoading();
+                setScreen("balance-loading");
+
+                const currentSession = balanceLoadingSessionRef.current + 1;
+                balanceLoadingSessionRef.current = currentSession;
+
+                const durationPromise = getCashWithdrawalDurationMs();
+                void playCashWithdrawalSound();
+                const durationMs = await durationPromise;
+                setBalanceLoadingDurationMs(durationMs);
+
+                if (balanceLoadingSessionRef.current !== currentSession) {
+                  return;
+                }
+
+                balanceLoadingTimeoutRef.current = window.setTimeout(() => {
+                  if (balanceLoadingSessionRef.current === currentSession) {
+                    setScreen("balance-result");
+                  }
+                }, durationMs);
               }
             }}
-            onBackToBalanceSelection={() => setScreen("balance-select")}
+            onBackToBalanceSelection={() => {
+              clearBalanceLoading();
+              setScreen("balance-select");
+            }}
             onCancel={handleCancel}
           />
         </div>

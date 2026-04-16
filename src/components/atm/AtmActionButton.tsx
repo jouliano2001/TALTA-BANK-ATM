@@ -1,4 +1,5 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, MouseEvent, ReactNode } from "react";
+import { playAtmClickSound } from "@/lib/atmClickSound";
 import { cn } from "@/lib/utils";
 
 type AtmActionButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -15,8 +16,18 @@ export function AtmActionButton({
   subtitle,
   align = "left",
   tone = "primary",
+  onClick,
+  disabled,
   ...props
 }: AtmActionButtonProps) {
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    if (!disabled) {
+      void playAtmClickSound();
+    }
+
+    onClick?.(event);
+  }
+
   return (
     <button
       className={cn(
@@ -30,6 +41,8 @@ export function AtmActionButton({
           "border-[#7caefc]/50 bg-[linear-gradient(180deg,rgba(35,92,182,0.78),rgba(24,58,122,0.92))] shadow-[0_10px_18px_rgba(4,12,30,0.36),inset_0_1px_0_rgba(208,227,255,0.2)] hover:border-[#97beff]",
         className,
       )}
+      onClick={handleClick}
+      disabled={disabled}
       {...props}
     >
       <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(177,218,255,0.22),transparent_58%)] opacity-80" />

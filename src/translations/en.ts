@@ -17,6 +17,8 @@ export const enTranslations = {
   "atm.balanceSelect.fieldLabel": "Customer name",
   "atm.balanceSelect.placeholder": "Select customer",
   "atm.balanceSelect.confirm": "Enter",
+  "atm.balanceLoading.title": "Preparing account statement",
+  "atm.balanceLoading.subtitle": "Please wait while your current balance is being displayed on screen.",
   "atm.balanceResult.customerLabel": "Customer name",
   "atm.backButton": "Back",
   "atm.contactlessLabel": "Contactless",

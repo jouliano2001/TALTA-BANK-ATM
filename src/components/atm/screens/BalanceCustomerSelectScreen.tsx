@@ -3,6 +3,7 @@ import { ArrowLeft, Check, ChevronDown, UserRound } from "lucide-react";
 import { AtmActionButton } from "@/components/atm/AtmActionButton";
 import type { Customer } from "@/data/customers";
 import { translate, type SupportedLanguage } from "@/content/atmContent";
+import { playAtmClickSound } from "@/lib/atmClickSound";
 import { cn } from "@/lib/utils";
 
 type BalanceCustomerSelectScreenProps = {
@@ -74,7 +75,10 @@ export function BalanceCustomerSelectScreen({
           <div ref={rootRef} className="relative">
             <button
               type="button"
-              onClick={() => setIsOpen((open) => !open)}
+              onClick={() => {
+                void playAtmClickSound();
+                setIsOpen((open) => !open);
+              }}
               className={cn(
                 "flex h-12 w-full items-center rounded-[16px] border border-[#6ea7ff]/35 bg-[linear-gradient(180deg,rgba(12,33,67,0.98),rgba(6,18,38,0.98))] text-sm text-[#f4f8ff] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none transition hover:border-[#87b7ff]/55 focus-visible:border-[#8db9ff] focus-visible:shadow-[0_0_0_1px_rgba(141,185,255,0.4)] sm:h-13 sm:text-[15px] md:h-14 md:rounded-[18px] md:text-base",
                 isArabic
@@ -105,6 +109,7 @@ export function BalanceCustomerSelectScreen({
                         key={customer.id}
                         type="button"
                         onClick={() => {
+                          void playAtmClickSound();
                           onSelectCustomer(customer.id);
                           setIsOpen(false);
                         }}

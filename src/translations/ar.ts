@@ -17,6 +17,8 @@ export const arTranslations = {
   "atm.balanceSelect.fieldLabel": "اسم العميل",
   "atm.balanceSelect.placeholder": "اختر اسم العميل",
   "atm.balanceSelect.confirm": "دخول",
+  "atm.balanceLoading.title": "جاري تجهيز كشف الحساب",
+  "atm.balanceLoading.subtitle": "برجاء الانتظار حتى يتم عرض الرصيد الحالي على الشاشة",
   "atm.balanceResult.customerLabel": "اسم العميل",
   "atm.backButton": "الرجوع",
   "atm.contactlessLabel": "بدون تلامس",
