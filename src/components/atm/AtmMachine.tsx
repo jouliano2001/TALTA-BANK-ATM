@@ -112,117 +112,121 @@ export function AtmMachine({
                   )}
                 >
                   <ScreenGlow />
-                  <AnimatePresence mode="wait">
-                    {screen === "idle" && (
-                      <motion.div
-                        key="idle"
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 1.02 }}
-                        transition={{ duration: 0.45 }}
-                        className="absolute inset-0"
-                      >
-                        <IdleScreen language={language} />
-                      </motion.div>
-                    )}
-                    {screen === "language" && (
-                      <motion.div
-                        key="language"
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.42 }}
-                        className="absolute inset-0"
-                      >
-                        <LanguageScreen onSelectLanguage={onSelectLanguage} />
-                      </motion.div>
-                    )}
-                    {screen === "welcome" && (
-                      <motion.div
-                        key="welcome"
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.42 }}
-                        className="absolute inset-0"
-                      >
-                        <WelcomeScreen
-                          language={language}
-                          isArabic={isArabic}
-                          onPrimaryAction={onPrimaryAction}
-                        />
-                      </motion.div>
-                    )}
-                    {screen === "services" && (
-                      <motion.div
-                        key="services"
-                        initial={{ opacity: 0, x: 26 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -26 }}
-                        transition={{ duration: 0.38 }}
-                        className="absolute inset-0"
-                      >
-                        <ServicesScreen
-                          language={language}
-                          isArabic={isArabic}
-                          onBalanceAction={onBalanceAction}
-                          onPurchaseAction={onPurchaseAction}
-                        />
-                      </motion.div>
-                    )}
-                    {screen === "balance-select" && (
-                      <motion.div
-                        key="balance-select"
-                        initial={{ opacity: 0, x: 26 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -26 }}
-                        transition={{ duration: 0.38 }}
-                        className="absolute inset-0"
-                      >
-                        <BalanceCustomerSelectScreen
-                          language={language}
-                          customers={customers}
-                          selectedCustomerId={selectedCustomerId}
-                          onSelectCustomer={onSelectCustomer}
-                          onConfirm={onConfirmCustomerBalance}
-                          onBack={onBackToServices}
-                        />
-                      </motion.div>
-                    )}
-                    {screen === "balance-result" && selectedCustomer && (
-                      <motion.div
-                        key="balance-result"
-                        initial={{ opacity: 0, x: 26 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -26 }}
-                        transition={{ duration: 0.38 }}
-                        className="absolute inset-0"
-                      >
-                        <BalanceResultScreen
-                          language={language}
-                          customer={selectedCustomer}
-                          signatureImage={atmContent.signature.image}
-                          onBack={onBackToBalanceSelection}
-                        />
-                      </motion.div>
-                    )}
-                    {screen === "purchase" && (
-                      <motion.div
-                        key="purchase"
-                        initial={{ opacity: 0, x: 26 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -26 }}
-                        transition={{ duration: 0.38 }}
-                        className="absolute inset-0"
-                      >
-                        <PurchaseScreen
-                          language={language}
-                          isArabic={isArabic}
-                          onBack={onBackToServices}
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="h-full w-full origin-center scale-[0.84] sm:scale-[0.92] md:scale-100">
+                      <AnimatePresence mode="wait">
+                        {screen === "idle" && (
+                          <motion.div
+                            key="idle"
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 1.02 }}
+                            transition={{ duration: 0.45 }}
+                            className="absolute inset-0"
+                          >
+                            <IdleScreen language={language} />
+                          </motion.div>
+                        )}
+                        {screen === "language" && (
+                          <motion.div
+                            key="language"
+                            initial={{ opacity: 0, y: 24 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.42 }}
+                            className="absolute inset-0"
+                          >
+                            <LanguageScreen onSelectLanguage={onSelectLanguage} />
+                          </motion.div>
+                        )}
+                        {screen === "welcome" && (
+                          <motion.div
+                            key="welcome"
+                            initial={{ opacity: 0, y: 24 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.42 }}
+                            className="absolute inset-0"
+                          >
+                            <WelcomeScreen
+                              language={language}
+                              isArabic={isArabic}
+                              onPrimaryAction={onPrimaryAction}
+                            />
+                          </motion.div>
+                        )}
+                        {screen === "services" && (
+                          <motion.div
+                            key="services"
+                            initial={{ opacity: 0, x: 26 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -26 }}
+                            transition={{ duration: 0.38 }}
+                            className="absolute inset-0"
+                          >
+                            <ServicesScreen
+                              language={language}
+                              isArabic={isArabic}
+                              onBalanceAction={onBalanceAction}
+                              onPurchaseAction={onPurchaseAction}
+                            />
+                          </motion.div>
+                        )}
+                        {screen === "balance-select" && (
+                          <motion.div
+                            key="balance-select"
+                            initial={{ opacity: 0, x: 26 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -26 }}
+                            transition={{ duration: 0.38 }}
+                            className="absolute inset-0"
+                          >
+                            <BalanceCustomerSelectScreen
+                              language={language}
+                              customers={customers}
+                              selectedCustomerId={selectedCustomerId}
+                              onSelectCustomer={onSelectCustomer}
+                              onConfirm={onConfirmCustomerBalance}
+                              onBack={onBackToServices}
+                            />
+                          </motion.div>
+                        )}
+                        {screen === "balance-result" && selectedCustomer && (
+                          <motion.div
+                            key="balance-result"
+                            initial={{ opacity: 0, x: 26 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -26 }}
+                            transition={{ duration: 0.38 }}
+                            className="absolute inset-0"
+                          >
+                            <BalanceResultScreen
+                              language={language}
+                              customer={selectedCustomer}
+                              signatureImage={atmContent.signature.image}
+                              onBack={onBackToBalanceSelection}
+                            />
+                          </motion.div>
+                        )}
+                        {screen === "purchase" && (
+                          <motion.div
+                            key="purchase"
+                            initial={{ opacity: 0, x: 26 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -26 }}
+                            transition={{ duration: 0.38 }}
+                            className="absolute inset-0"
+                          >
+                            <PurchaseScreen
+                              language={language}
+                              isArabic={isArabic}
+                              onBack={onBackToServices}
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -334,25 +338,39 @@ function KeypadPanel({ onCancel }: { onCancel: () => void }) {
         <button
           type="button"
           onClick={onCancel}
-          className="group flex h-6 items-center justify-center overflow-hidden rounded-[6px] border border-black/40 bg-[#c84d37] px-2 py-1 text-[4px] font-black uppercase tracking-[0.02em] text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] transition hover:brightness-110 sm:h-7 sm:rounded-[7px] sm:px-2.5 sm:py-1.5 sm:text-[4.5px] md:h-8 md:px-3 md:py-1.5 md:text-[5.5px]"
+          className="group flex h-6 items-center justify-center overflow-hidden rounded-[6px] border border-black/40 bg-[#c84d37] px-2 py-1 font-black uppercase tracking-[0.02em] text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] transition hover:brightness-110 sm:h-7 sm:rounded-[7px] sm:px-2.5 sm:py-1.5 md:h-8 md:px-3 md:py-1.5"
         >
-          <span className="scale-[0.72] leading-none">{atmContent.hardware.cancelLabel}</span>
+          <span className="text-[4px] leading-none sm:hidden">C</span>
+          <span className="hidden px-1 text-[10px] font-black leading-none sm:inline sm:text-[11px]">
+            {atmContent.hardware.cancelLabel}
+          </span>
         </button>
-        <FunctionKey color="bg-[#d0a52d]" />
-        <FunctionKey color="bg-[#7dbd48]" />
+        <FunctionKey color="bg-[#d0a52d]" mobileLabel="R" desktopLabel="Review" />
+        <FunctionKey color="bg-[#7dbd48]" mobileLabel="E" desktopLabel="Enter" />
       </div>
     </div>
   );
 }
 
-function FunctionKey({ color }: { color: string }) {
+function FunctionKey({
+  color,
+  mobileLabel,
+  desktopLabel,
+}: {
+  color: string;
+  mobileLabel?: string;
+  desktopLabel?: string;
+}) {
   return (
     <div
       className={cn(
-        "h-7 rounded-[7px] border border-black/40 shadow-[0_2px_4px_rgba(0,0,0,0.22)] sm:h-8",
+        "flex h-7 items-center justify-center rounded-[7px] border border-black/40 text-[10px] font-black uppercase text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] sm:h-8 sm:text-[11px]",
         color,
       )}
-    />
+    >
+      {mobileLabel && <span className="sm:hidden">{mobileLabel}</span>}
+      {desktopLabel && <span className="hidden px-1 leading-none sm:inline">{desktopLabel}</span>}
+    </div>
   );
 }
 
