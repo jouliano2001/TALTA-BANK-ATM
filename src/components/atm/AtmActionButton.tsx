@@ -35,23 +35,23 @@ export function AtmActionButton({
       <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(177,218,255,0.22),transparent_58%)] opacity-80" />
       <span
         className={cn(
-          "relative flex items-center gap-3 px-5 py-4",
+          "relative flex items-center gap-2.5 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3 md:px-5 md:py-4",
           align === "right"
             ? "justify-between text-right"
             : "justify-start text-left",
         )}
       >
         {icon && (
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border border-white/12 bg-black/18 text-[#dce9ff] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-white/12 bg-black/18 text-[#dce9ff] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:h-10 sm:w-10 sm:rounded-[13px] md:h-11 md:w-11 md:rounded-[14px]">
             {icon}
           </span>
         )}
         <span className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate text-base font-semibold tracking-[0.01em] sm:text-lg">
+          <span className="truncate text-sm font-semibold tracking-[0.01em] sm:text-base md:text-lg">
             {children}
           </span>
           {subtitle && (
-            <span className="mt-1 text-xs uppercase tracking-[0.18em] text-[#c8daf9]/80">
+            <span className="mt-0.5 text-[10px] uppercase tracking-[0.14em] text-[#c8daf9]/80 sm:mt-1 sm:text-[11px] md:text-xs md:tracking-[0.18em]">
               {subtitle}
             </span>
           )}
