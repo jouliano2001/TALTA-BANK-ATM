@@ -138,10 +138,10 @@ export function AtmMachine({
           minHeight: `${baseMachineHeight}px`,
         }}
       >
-        <div className="relative rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,#5d6167_0%,#2e3238_18%,#11151b_68%,#070a10_100%)] p-4 shadow-[0_45px_100px_rgba(0,0,0,0.58)]">
+        <div className="relative rounded-[34px] border border-white/16 bg-[linear-gradient(180deg,#c2c8d0_0%,#838b97_18%,#404955_68%,#1b232d_100%)] p-4 shadow-[0_45px_100px_rgba(0,0,0,0.42)]">
           <div className="absolute inset-[1px] rounded-[33px] bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_26%,transparent_56%,rgba(255,255,255,0.08)_82%,rgba(0,0,0,0.4))]" />
-          <div className="relative rounded-[28px] border border-black/40 bg-[linear-gradient(180deg,#2b2e33_0%,#141920_24%,#090d13_100%)] px-5 pb-6 pt-5">
-          <header className="mb-3 flex items-center justify-between rounded-[14px] border border-white/12 bg-[linear-gradient(180deg,#3a3e45,#191d22)] px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] sm:mb-4 sm:rounded-[16px] sm:px-4 sm:py-3">
+          <div className="relative rounded-[28px] border border-black/25 bg-[linear-gradient(180deg,#626a75_0%,#36404a_24%,#1a222b_100%)] px-5 pb-6 pt-5">
+          <header className="mb-3 flex items-center justify-between rounded-[14px] border border-white/18 bg-[linear-gradient(180deg,#7b8490,#434c57)] px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.26)] sm:mb-4 sm:rounded-[16px] sm:px-4 sm:py-3">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#f4da8c] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] sm:h-11 sm:w-11 sm:rounded-xl md:h-12 md:w-12">
                 <img
@@ -163,7 +163,7 @@ export function AtmMachine({
             </div>
           </header>
 
-          <div className="relative rounded-[20px] border border-white/8 bg-[linear-gradient(180deg,#26292e,#090c11)] p-2.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05),0_18px_34px_rgba(0,0,0,0.36)] sm:rounded-[24px] sm:p-3 md:p-4">
+          <div className="relative rounded-[20px] border border-white/14 bg-[linear-gradient(180deg,#58616c,#273039)] p-2.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1),0_18px_34px_rgba(0,0,0,0.28)] sm:rounded-[24px] sm:p-3 md:p-4">
             <div className="flex items-stretch gap-1.5 sm:gap-2 md:gap-3">
               <MachineSideButtons side="left" />
 
@@ -320,11 +320,11 @@ export function AtmMachine({
             </div>
           </motion.div>
 
-          <div className="mt-3 rounded-[16px] border border-white/6 bg-[linear-gradient(180deg,#262a31,#0f141b)] px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:mt-5 sm:rounded-[18px] sm:px-4 sm:py-4">
+          <div className="mt-3 rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5a636e,#2b333d)] px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:mt-5 sm:rounded-[18px] sm:px-4 sm:py-4">
             <div className="mx-auto h-2.5 w-24 rounded-full bg-black/45 shadow-[inset_0_1px_2px_rgba(255,255,255,0.08)] sm:h-3 sm:w-28 md:w-36" />
           </div>
 
-          <div className="mx-auto mt-2 h-4 w-[86%] rounded-b-[16px] border border-white/5 bg-[linear-gradient(180deg,#1b1f25,#090d13)] sm:mt-3 sm:h-5 sm:rounded-b-[20px]" />
+          <div className="mx-auto mt-2 h-4 w-[86%] rounded-b-[16px] border border-white/10 bg-[linear-gradient(180deg,#505964,#29313b)] sm:mt-3 sm:h-5 sm:rounded-b-[20px]" />
           </div>
         </div>
       </motion.div>
@@ -368,7 +368,7 @@ function HardwarePanel({
   label: string;
 }) {
   return (
-    <div className="flex min-h-[88px] flex-col justify-between rounded-[14px] border border-white/7 bg-[linear-gradient(180deg,#262a31,#11161d)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:min-h-[105px] sm:rounded-[16px] sm:p-3 md:min-h-[122px] md:p-4">
+    <div className="flex min-h-[88px] flex-col justify-between rounded-[14px] border border-white/12 bg-[linear-gradient(180deg,#5a6470,#2b343e)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:min-h-[105px] sm:rounded-[16px] sm:p-3 md:min-h-[122px] md:p-4">
       <span className="text-[8px] font-semibold uppercase tracking-[0.15em] text-white/70 sm:text-[9px] md:text-[10px] md:tracking-[0.2em]">
         {title}
       </span>
@@ -388,7 +388,7 @@ function KeypadPanel({ onCancel }: { onCancel: () => void }) {
   const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", ""];
 
   return (
-    <div className="rounded-[16px] border border-white/7 bg-[linear-gradient(180deg,#252a30,#121821)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[18px] sm:p-3 md:p-4">
+    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-3 md:p-4">
       <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
         {keys.map((key, index) => (
           <div
@@ -475,7 +475,7 @@ function SlotPanel({
   accent: "green" | "neutral";
 }) {
   return (
-    <div className="rounded-[16px] border border-white/7 bg-[linear-gradient(180deg,#252a30,#10151c)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-4">
+    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#59626d,#2a323b)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:p-4">
       <div className="mb-2 text-center text-[9px] font-semibold uppercase tracking-[0.2em] text-white/72 sm:text-[10px]">
         {title}
       </div>
