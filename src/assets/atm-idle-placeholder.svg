@@ -1,0 +1,23 @@
+<svg width="1400" height="960" viewBox="0 0 1400 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="960" rx="32" fill="#06152D"/>
+  <rect x="56" y="56" width="1288" height="848" rx="28" fill="url(#paint0_linear)"/>
+  <rect x="86" y="86" width="1228" height="788" rx="24" fill="#10294E"/>
+  <path d="M86 632L407.04 356.256C443.169 325.224 496.311 330.655 525.705 368.168L644.239 519.412C667.353 548.899 708.204 555.214 738.822 533.847L915.919 410.247C952.627 384.631 1002.72 391.12 1031.72 425.192L1314 756V874H86V632Z" fill="url(#paint1_linear)"/>
+  <circle cx="1117" cy="209" r="68" fill="#6CB0FF" fill-opacity="0.35"/>
+  <rect x="141" y="140" width="286" height="162" rx="18" fill="#133867" stroke="#4F8DDE" stroke-opacity="0.6"/>
+  <text x="180" y="208" fill="#D9E8FF" font-family="Arial, sans-serif" font-size="44" font-weight="700">PLACEHOLDER</text>
+  <text x="180" y="260" fill="#9DC2F8" font-family="Arial, sans-serif" font-size="28">Replace from src/assets</text>
+  <rect x="144" y="718" width="497" height="98" rx="20" fill="#08162E" fill-opacity="0.74" stroke="#6AA6F6" stroke-opacity="0.42"/>
+  <text x="178" y="776" fill="#F4F8FF" font-family="Arial, sans-serif" font-size="34" font-weight="700">ATM Idle Display Placeholder</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="700" y1="56" x2="700" y2="904" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F2C57"/>
+      <stop offset="1" stop-color="#071427"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear" x1="700" y1="300" x2="700" y2="874" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#285998"/>
+      <stop offset="0.52" stop-color="#12305B"/>
+      <stop offset="1" stop-color="#0A1D39"/>
+    </linearGradient>
+  </defs>
+</svg>

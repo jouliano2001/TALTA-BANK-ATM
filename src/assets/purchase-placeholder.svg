@@ -1,0 +1,21 @@
+<svg width="1400" height="960" viewBox="0 0 1400 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="960" rx="32" fill="#07111F"/>
+  <rect x="54" y="54" width="1292" height="852" rx="28" fill="url(#paint0_linear)"/>
+  <ellipse cx="1035" cy="717" rx="208" ry="120" fill="#1D4A8A" fill-opacity="0.52"/>
+  <ellipse cx="344" cy="312" rx="224" ry="154" fill="#12396C" fill-opacity="0.58"/>
+  <rect x="177" y="158" width="366" height="184" rx="20" fill="#142A47" stroke="#5E9FF8" stroke-opacity="0.4"/>
+  <text x="220" y="228" fill="#E3EEFF" font-family="Arial, sans-serif" font-size="42" font-weight="700">PLACEHOLDER</text>
+  <text x="220" y="282" fill="#9DC2F8" font-family="Arial, sans-serif" font-size="28">Purchase / bidding image</text>
+  <rect x="742" y="286" width="380" height="220" rx="26" transform="rotate(14 742 286)" fill="#0D1626" stroke="#7DAAEB" stroke-opacity="0.35"/>
+  <rect x="778" y="352" width="306" height="110" rx="16" transform="rotate(14 778 352)" fill="#132D55"/>
+  <circle cx="417" cy="624" r="96" fill="#18375F"/>
+  <rect x="318" y="547" width="199" height="150" rx="28" fill="#0B182C" stroke="#3F6EAB" stroke-opacity="0.5"/>
+  <rect x="148" y="768" width="651" height="94" rx="20" fill="#08162B" fill-opacity="0.76" stroke="#6AA6F6" stroke-opacity="0.42"/>
+  <text x="184" y="824" fill="#F4F8FF" font-family="Arial, sans-serif" font-size="34" font-weight="700">Replace from src/assets/purchase-placeholder.svg</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="700" y1="54" x2="700" y2="906" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#122645"/>
+      <stop offset="1" stop-color="#07111F"/>
+    </linearGradient>
+  </defs>
+</svg>

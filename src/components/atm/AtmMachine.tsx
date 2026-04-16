@@ -1,0 +1,585 @@
+import type { ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowLeft,
+  CreditCard,
+  MousePointerClick,
+  ShoppingCart,
+  Waves,
+} from "lucide-react";
+import { AtmActionButton } from "@/components/atm/AtmActionButton";
+import { BalanceCustomerSelectScreen } from "@/components/atm/screens/BalanceCustomerSelectScreen";
+import { BalanceResultScreen } from "@/components/atm/screens/BalanceResultScreen";
+import { atmContent, translate, type SupportedLanguage } from "@/content/atmContent";
+import { customers, type Customer } from "@/data/customers";
+import { cn } from "@/lib/utils";
+
+type FlowScreen =
+  | "idle"
+  | "language"
+  | "welcome"
+  | "services"
+  | "balance-select"
+  | "balance-result"
+  | "purchase";
+
+type AtmMachineProps = {
+  screen: FlowScreen;
+  language: SupportedLanguage;
+  isZoomed: boolean;
+  selectedCustomerId: number | null;
+  selectedCustomer: Customer | null;
+  onScreenClick: () => void;
+  onSelectLanguage: (language: SupportedLanguage) => void;
+  onPrimaryAction: () => void;
+  onBalanceAction: () => void;
+  onPurchaseAction: () => void;
+  onBackToServices: () => void;
+  onSelectCustomer: (customerId: number) => void;
+  onConfirmCustomerBalance: () => void;
+  onBackToBalanceSelection: () => void;
+  onCancel: () => void;
+};
+
+export function AtmMachine({
+  screen,
+  language,
+  isZoomed,
+  selectedCustomerId,
+  selectedCustomer,
+  onScreenClick,
+  onSelectLanguage,
+  onPrimaryAction,
+  onBalanceAction,
+  onPurchaseAction,
+  onBackToServices,
+  onSelectCustomer,
+  onConfirmCustomerBalance,
+  onBackToBalanceSelection,
+  onCancel,
+}: AtmMachineProps) {
+  const isArabic = language === "ar";
+
+  return (
+    <motion.div
+      layout
+      initial={false}
+      animate={{
+        scale: isZoomed ? 1.14 : 0.9,
+        y: isZoomed ? -10 : 0,
+        x: isZoomed ? -12 : 0,
+      }}
+      transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
+      className="relative w-full max-w-[460px] origin-center sm:max-w-[560px] lg:max-w-[640px] xl:max-w-[720px]"
+    >
+      <div className="relative rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,#5d6167_0%,#2e3238_18%,#11151b_68%,#070a10_100%)] p-4 shadow-[0_45px_100px_rgba(0,0,0,0.58)] sm:p-5">
+        <div className="absolute inset-[1px] rounded-[33px] bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_26%,transparent_56%,rgba(255,255,255,0.08)_82%,rgba(0,0,0,0.4))]" />
+        <div className="relative rounded-[28px] border border-black/40 bg-[linear-gradient(180deg,#2b2e33_0%,#141920_24%,#090d13_100%)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6 sm:pt-5">
+          <header className="mb-4 flex items-center justify-between rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#3a3e45,#191d22)] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#f4da8c] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] sm:h-12 sm:w-12">
+                <img
+                  src={atmContent.logo.image}
+                  alt={atmContent.logo.alt}
+                  className="h-full w-full object-contain p-1"
+                />
+              </div>
+              <div className="font-atm text-[clamp(1.2rem,2.3vw,1.8rem)] font-semibold uppercase tracking-[0.18em] text-[#ecf2ff]">
+                ATM
+              </div>
+            </div>
+            <div className="flex h-12 items-center justify-end sm:h-14">
+              <img
+                src={atmContent.bankLogo.image}
+                alt={atmContent.bankLogo.alt}
+                className="h-full w-auto max-w-[162px] object-contain sm:max-w-[190px]"
+              />
+            </div>
+          </header>
+
+          <div className="relative rounded-[24px] border border-white/8 bg-[linear-gradient(180deg,#26292e,#090c11)] p-3 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05),0_24px_44px_rgba(0,0,0,0.42)] sm:p-4">
+            <div className="flex items-stretch gap-2 sm:gap-3">
+              <MachineSideButtons side="left" />
+
+              <div className="relative min-w-0 flex-1 rounded-[18px] border border-black/60 bg-[linear-gradient(180deg,#11161f,#060a12)] p-[10px] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]">
+                <div className="absolute inset-[10px] rounded-[14px] border border-white/5 bg-[linear-gradient(135deg,rgba(255,255,255,0.09),transparent_26%,transparent_74%,rgba(255,255,255,0.04))]" />
+                <div
+                  onClick={screen === "idle" ? onScreenClick : undefined}
+                  className={cn(
+                    "relative flex aspect-[1.34/1] w-full overflow-hidden rounded-[12px] border border-[#18325f] bg-[radial-gradient(circle_at_top,rgba(33,70,129,0.45),transparent_38%),linear-gradient(180deg,#04142f_0%,#071021_54%,#07172c_100%)] text-left shadow-[inset_0_0_22px_rgba(87,145,255,0.12)]",
+                    screen === "idle" &&
+                      "cursor-pointer transition duration-300 hover:border-[#6ca9ff] hover:shadow-[0_0_0_1px_rgba(108,169,255,0.32),inset_0_0_34px_rgba(95,155,255,0.18)]",
+                  )}
+                >
+                  <ScreenGlow />
+                  <AnimatePresence mode="wait">
+                    {screen === "idle" && (
+                      <motion.div
+                        key="idle"
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 1.02 }}
+                        transition={{ duration: 0.45 }}
+                        className="absolute inset-0"
+                      >
+                        <IdleScreen language={language} />
+                      </motion.div>
+                    )}
+                    {screen === "language" && (
+                      <motion.div
+                        key="language"
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.42 }}
+                        className="absolute inset-0"
+                      >
+                        <LanguageScreen onSelectLanguage={onSelectLanguage} />
+                      </motion.div>
+                    )}
+                    {screen === "welcome" && (
+                      <motion.div
+                        key="welcome"
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.42 }}
+                        className="absolute inset-0"
+                      >
+                        <WelcomeScreen
+                          language={language}
+                          isArabic={isArabic}
+                          onPrimaryAction={onPrimaryAction}
+                        />
+                      </motion.div>
+                    )}
+                    {screen === "services" && (
+                      <motion.div
+                        key="services"
+                        initial={{ opacity: 0, x: 26 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -26 }}
+                        transition={{ duration: 0.38 }}
+                        className="absolute inset-0"
+                      >
+                        <ServicesScreen
+                          language={language}
+                          isArabic={isArabic}
+                          onBalanceAction={onBalanceAction}
+                          onPurchaseAction={onPurchaseAction}
+                        />
+                      </motion.div>
+                    )}
+                    {screen === "balance-select" && (
+                      <motion.div
+                        key="balance-select"
+                        initial={{ opacity: 0, x: 26 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -26 }}
+                        transition={{ duration: 0.38 }}
+                        className="absolute inset-0"
+                      >
+                        <BalanceCustomerSelectScreen
+                          language={language}
+                          customers={customers}
+                          selectedCustomerId={selectedCustomerId}
+                          onSelectCustomer={onSelectCustomer}
+                          onConfirm={onConfirmCustomerBalance}
+                          onBack={onBackToServices}
+                        />
+                      </motion.div>
+                    )}
+                    {screen === "balance-result" && selectedCustomer && (
+                      <motion.div
+                        key="balance-result"
+                        initial={{ opacity: 0, x: 26 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -26 }}
+                        transition={{ duration: 0.38 }}
+                        className="absolute inset-0"
+                      >
+                        <BalanceResultScreen
+                          language={language}
+                          customer={selectedCustomer}
+                          signatureImage={atmContent.signature.image}
+                          onBack={onBackToBalanceSelection}
+                        />
+                      </motion.div>
+                    )}
+                    {screen === "purchase" && (
+                      <motion.div
+                        key="purchase"
+                        initial={{ opacity: 0, x: 26 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -26 }}
+                        transition={{ duration: 0.38 }}
+                        className="absolute inset-0"
+                      >
+                        <PurchaseScreen
+                          language={language}
+                          isArabic={isArabic}
+                          onBack={onBackToServices}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              <MachineSideButtons side="right" />
+            </div>
+          </div>
+
+          <motion.div
+            animate={{ opacity: isZoomed ? 1 : 0.88, y: isZoomed ? 0 : 14 }}
+            transition={{ duration: 0.6, delay: isZoomed ? 0.2 : 0 }}
+            className="mt-5 grid grid-cols-[1fr_1.4fr_1fr] gap-3 sm:gap-4"
+          >
+            <HardwarePanel
+              title={atmContent.hardware.contactless}
+              icon={<Waves className="h-8 w-8 text-[#d8e7ff]" />}
+              label={translate(language, "atm.contactlessLabel")}
+            />
+            <KeypadPanel onCancel={onCancel} />
+            <div className="grid gap-3 sm:gap-4">
+              <SlotPanel title={atmContent.hardware.cardSlot} accent="green" />
+              <SlotPanel title={atmContent.hardware.receiptSlot} accent="neutral" />
+            </div>
+          </motion.div>
+
+          <div className="mt-5 rounded-[18px] border border-white/6 bg-[linear-gradient(180deg,#262a31,#0f141b)] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+            <div className="mx-auto h-3 w-28 rounded-full bg-black/45 shadow-[inset_0_1px_2px_rgba(255,255,255,0.08)] sm:w-36" />
+          </div>
+
+          <div className="mx-auto mt-3 h-5 w-[86%] rounded-b-[20px] border border-white/5 bg-[linear-gradient(180deg,#1b1f25,#090d13)]" />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function ScreenGlow() {
+  return (
+    <>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,127,255,0.18),transparent_38%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(12,164,255,0.08),transparent_28%)]" />
+      <div className="pointer-events-none absolute inset-0 rounded-[12px] border border-white/5" />
+    </>
+  );
+}
+
+function MachineSideButtons({ side }: { side: "left" | "right" }) {
+  return (
+    <div className="flex w-[24px] shrink-0 flex-col justify-center gap-4 sm:w-[28px] sm:gap-5">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div
+          key={`${side}-${index}`}
+          className={cn(
+            "h-4 rounded-[4px] border border-white/18 bg-[linear-gradient(180deg,#f7f8fb,#b6bcc7_48%,#737c88)] shadow-[0_2px_6px_rgba(0,0,0,0.25)] sm:h-5",
+            side === "left" ? "origin-left" : "origin-right",
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
+function HardwarePanel({
+  title,
+  icon,
+  label,
+}: {
+  title: string;
+  icon: ReactNode;
+  label: string;
+}) {
+  return (
+    <div className="flex min-h-[105px] flex-col justify-between rounded-[16px] border border-white/7 bg-[linear-gradient(180deg,#262a31,#11161d)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:min-h-[122px] sm:p-4">
+      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/70 sm:text-[10px]">
+        {title}
+      </span>
+      <div className="flex flex-col items-center gap-2 text-center">
+        <div className="flex h-14 w-full items-center justify-center rounded-[14px] border border-white/8 bg-black/22">
+          {icon}
+        </div>
+        <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/55 sm:text-[10px]">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function KeypadPanel({ onCancel }: { onCancel: () => void }) {
+  const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", ""];
+
+  return (
+    <div className="rounded-[18px] border border-white/7 bg-[linear-gradient(180deg,#252a30,#121821)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-4">
+      <div className="grid grid-cols-3 gap-2">
+        {keys.map((key, index) => (
+          <div
+            key={`${key}-${index}`}
+            className={cn(
+              "flex h-8 items-center justify-center rounded-[7px] border text-xs font-semibold sm:h-9 sm:text-sm",
+              key
+                ? "border-black/45 bg-[linear-gradient(180deg,#f5f5f7,#9aa1ac)] text-[#222831] shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
+                : "border-transparent bg-transparent shadow-none",
+            )}
+          >
+            {key}
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="group flex h-7 items-center justify-center overflow-hidden rounded-[7px] border border-black/40 bg-[#c84d37] px-2.5 py-1.5 text-[4.5px] font-black uppercase tracking-[0.02em] text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] transition hover:brightness-110 sm:h-8 sm:px-3 sm:py-1.5 sm:text-[5.5px]"
+        >
+          <span className="scale-[0.72] leading-none">{atmContent.hardware.cancelLabel}</span>
+        </button>
+        <FunctionKey color="bg-[#d0a52d]" />
+        <FunctionKey color="bg-[#7dbd48]" />
+      </div>
+    </div>
+  );
+}
+
+function FunctionKey({ color }: { color: string }) {
+  return (
+    <div
+      className={cn(
+        "h-7 rounded-[7px] border border-black/40 shadow-[0_2px_4px_rgba(0,0,0,0.22)] sm:h-8",
+        color,
+      )}
+    />
+  );
+}
+
+function SlotPanel({
+  title,
+  accent,
+}: {
+  title: string;
+  accent: "green" | "neutral";
+}) {
+  return (
+    <div className="rounded-[16px] border border-white/7 bg-[linear-gradient(180deg,#252a30,#10151c)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-4">
+      <div className="mb-2 text-center text-[9px] font-semibold uppercase tracking-[0.2em] text-white/72 sm:text-[10px]">
+        {title}
+      </div>
+      <div className="rounded-[10px] border border-black/45 bg-black/38 p-2 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)]">
+        <div className="h-5 rounded-full bg-[linear-gradient(180deg,#05070a,#1a1e25)] shadow-[inset_0_1px_2px_rgba(255,255,255,0.08)]" />
+        <div
+          className={cn(
+            "mx-auto mt-1.5 h-1.5 w-10 rounded-full",
+            accent === "green"
+              ? "bg-[#49cb60] shadow-[0_0_12px_rgba(73,203,96,0.65)]"
+              : "bg-white/18",
+          )}
+        />
+      </div>
+    </div>
+  );
+}
+
+function IdleScreen({ language }: { language: SupportedLanguage }) {
+  return (
+    <div className="relative h-full w-full overflow-hidden rounded-[12px] bg-[linear-gradient(180deg,#f6e28a_0%,#f2cf54_100%)] p-4 sm:p-5">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,250,214,0.72),transparent_38%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(182,124,18,0.2),transparent_34%)]" />
+      <div className="relative h-full w-full">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <img
+            src={atmContent.logo.image}
+            alt={atmContent.logo.alt}
+            className="max-h-[60%] w-auto max-w-[70%] object-contain object-center drop-shadow-[0_14px_24px_rgba(94,67,9,0.2)]"
+          />
+        </div>
+        <div className="absolute bottom-4 right-4 max-w-[66%] rounded-2xl border border-[#a97e1b]/35 bg-[linear-gradient(180deg,rgba(255,247,221,0.82),rgba(244,221,152,0.92))] px-3 py-2 text-[#5f490f] shadow-[0_10px_20px_rgba(126,88,12,0.16)] sm:bottom-5 sm:right-5 sm:px-4">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#9f7718]/30 bg-white/35">
+              <MousePointerClick className="h-3.5 w-3.5 text-[#6a5011]" />
+            </div>
+            <div className="flex min-w-0 flex-col">
+              <span className="text-left text-[9px] font-semibold uppercase leading-tight tracking-[0.16em] sm:text-[10px]">
+                {translate(language, "atm.idleOverlay.title")}
+              </span>
+              <span className="text-left text-[8px] leading-tight text-[#6f5a22] sm:text-[9px]">
+                {translate(language, "atm.idleOverlay.subtitle")}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LanguageScreen({
+  onSelectLanguage,
+}: {
+  onSelectLanguage: (language: SupportedLanguage) => void;
+}) {
+  return (
+    <div className="flex h-full flex-col justify-center overflow-hidden px-5 py-5 text-center sm:px-6 sm:py-6">
+      <div className="mx-auto w-full max-w-[360px] rounded-[20px] border border-white/10 bg-black/18 px-5 py-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+        <p className="font-arabic text-lg font-semibold text-[#f4f8ff] sm:text-xl">
+          {translate("ar", "atm.language.title")}
+        </p>
+        <p className="mt-2 text-lg font-semibold text-[#d7e6ff] sm:text-xl">
+          {translate("en", "atm.language.subtitle")}
+        </p>
+        <div className="mt-6 grid gap-3">
+          <AtmActionButton type="button" onClick={() => onSelectLanguage("en")}>
+            {translate("en", "atm.language.english")}
+          </AtmActionButton>
+          <AtmActionButton
+            type="button"
+            className="font-arabic"
+            onClick={() => onSelectLanguage("ar")}
+          >
+            {translate("ar", "atm.language.arabic")}
+          </AtmActionButton>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WelcomeScreen({
+  language,
+  isArabic,
+  onPrimaryAction,
+}: {
+  language: SupportedLanguage;
+  isArabic: boolean;
+  onPrimaryAction: () => void;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex h-full flex-col overflow-hidden px-4 py-4 sm:px-5 sm:py-5",
+        isArabic && "font-arabic",
+      )}
+      dir={isArabic ? "rtl" : "ltr"}
+    >
+      <div className="flex flex-1 flex-col items-center justify-center text-center">
+        <p className="max-w-[420px] text-[clamp(0.95rem,2vw,1.5rem)] font-semibold leading-snug text-[#f4f8ff]">
+          {translate(language, "atm.welcome.heading")}
+        </p>
+        <p className="mt-4 max-w-[430px] text-[clamp(0.9rem,1.9vw,1.3rem)] font-medium leading-snug text-[#d7e6ff]">
+          {translate(language, "atm.welcome.subheading")}
+        </p>
+      </div>
+      <div className={cn("flex", isArabic ? "justify-start" : "justify-end")}>
+        <AtmActionButton
+          type="button"
+          tone="screen"
+          className="min-w-[170px] max-w-full sm:min-w-[210px]"
+          onClick={onPrimaryAction}
+        >
+          {translate(language, "atm.welcome.primaryAction")}
+        </AtmActionButton>
+      </div>
+    </div>
+  );
+}
+
+function ServicesScreen({
+  language,
+  isArabic,
+  onBalanceAction,
+  onPurchaseAction,
+}: {
+  language: SupportedLanguage;
+  isArabic: boolean;
+  onBalanceAction: () => void;
+  onPurchaseAction: () => void;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex h-full flex-col overflow-hidden px-4 py-4 sm:px-5 sm:py-5",
+        isArabic && "font-arabic",
+      )}
+      dir={isArabic ? "rtl" : "ltr"}
+    >
+      <div className="flex flex-1 flex-col justify-center">
+        <h2 className="text-center text-[clamp(1.05rem,2.3vw,1.8rem)] font-bold text-[#f2f6ff]">
+          {translate(language, "atm.services.heading")}
+        </h2>
+        <div className="mx-auto mt-6 flex w-full max-w-[430px] flex-col gap-3 sm:mt-8 sm:gap-4">
+          <AtmActionButton
+            type="button"
+            icon={<CreditCard className="h-6 w-6" />}
+            align={isArabic ? "right" : "left"}
+            subtitle={translate(language, "atm.services.balanceSubtitle")}
+            className={cn("w-full", isArabic && "font-arabic")}
+            onClick={onBalanceAction}
+          >
+            {translate(language, "atm.services.balanceButton")}
+          </AtmActionButton>
+          <AtmActionButton
+            type="button"
+            icon={<ShoppingCart className="h-6 w-6" />}
+            align={isArabic ? "right" : "left"}
+            subtitle={translate(language, "atm.services.purchaseSubtitle")}
+            className={cn("w-full", isArabic && "font-arabic")}
+            onClick={onPurchaseAction}
+          >
+            {translate(language, "atm.services.purchaseButton")}
+          </AtmActionButton>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PurchaseScreen({
+  language,
+  isArabic,
+  onBack,
+}: {
+  language: SupportedLanguage;
+  isArabic: boolean;
+  onBack: () => void;
+}) {
+  return (
+    <div className="relative flex h-full flex-col overflow-hidden p-3 sm:p-4">
+      <img
+        src={atmContent.purchase.image}
+        alt={atmContent.purchase.alt}
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,12,26,0.58),rgba(4,12,26,0.12),rgba(4,12,26,0.62))]" />
+      <div className={cn("relative flex items-start gap-3", isArabic ? "justify-start" : "justify-end")}>
+        <AtmActionButton
+          type="button"
+          tone="screen"
+          className={cn("min-w-[104px]", isArabic && "font-arabic")}
+          onClick={onBack}
+        >
+          <span className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            {translate(language, "atm.backButton")}
+          </span>
+        </AtmActionButton>
+      </div>
+      <div
+        className={cn(
+          "relative mt-auto rounded-[16px] border border-white/12 bg-black/26 px-4 py-3 backdrop-blur-[3px]",
+          isArabic ? "font-arabic text-right" : "text-left",
+        )}
+        dir={isArabic ? "rtl" : "ltr"}
+      >
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9fc2ff]">
+          {translate(language, "atm.purchase.captionLabel")}
+        </p>
+        <p className="mt-2 text-base font-semibold text-[#f6f9ff] sm:text-lg">
+          {translate(language, "atm.purchase.caption")}
+        </p>
+      </div>
+    </div>
+  );
+}
