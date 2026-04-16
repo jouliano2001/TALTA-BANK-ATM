@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -59,22 +59,88 @@ export function AtmMachine({
   onCancel,
 }: AtmMachineProps) {
   const isArabic = language === "ar";
+  const [viewport, setViewport] = useState({ width: 0, height: 0 });
+  const baseMachineWidth = 720;
+  const baseMachineHeight = 1120;
+
+  useEffect(() => {
+    function updateViewport() {
+      const visualViewport = window.visualViewport;
+
+      setViewport({
+        width: visualViewport?.width ?? window.innerWidth,
+        height: visualViewport?.height ?? window.innerHeight,
+      });
+    }
+
+    updateViewport();
+    window.addEventListener("resize", updateViewport);
+    window.visualViewport?.addEventListener("resize", updateViewport);
+    window.visualViewport?.addEventListener("scroll", updateViewport);
+
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+      window.visualViewport?.removeEventListener("resize", updateViewport);
+      window.visualViewport?.removeEventListener("scroll", updateViewport);
+    };
+  }, []);
+
+  const isMobileViewport = viewport.width > 0 && viewport.width < 640;
+  const cameraScale = isMobileViewport ? (isZoomed ? 0.98 : 0.84) : isZoomed ? 1.08 : 0.84;
+  const maxCameraScale = isMobileViewport ? 0.98 : 1.08;
+  const viewportPadding = isMobileViewport ? 10 : 24;
+  const availableWidth = Math.max(viewport.width - viewportPadding * 2, 280);
+  const availableHeight = Math.max(viewport.height - viewportPadding * 2, 420);
+  const fitScale =
+    viewport.width > 0 && viewport.height > 0
+      ? Math.min(
+          availableWidth / (baseMachineWidth * maxCameraScale),
+          availableHeight / (baseMachineHeight * maxCameraScale),
+          1,
+        )
+      : 1;
+  const reservedWidth = baseMachineWidth * fitScale * maxCameraScale;
+  const reservedHeight = baseMachineHeight * fitScale * maxCameraScale;
+  const screenContentScale = isMobileViewport
+    ? fitScale < 0.42
+      ? 0.66
+      : fitScale < 0.5
+        ? 0.72
+        : fitScale < 0.58
+          ? 0.78
+          : fitScale < 0.66
+            ? 0.84
+            : 0.9
+    : fitScale < 0.8
+      ? 0.94
+      : 1;
 
   return (
-    <motion.div
-      layout
-      initial={false}
-      animate={{
-        scale: isZoomed ? 1.08 : 0.84,
-        y: isZoomed ? -4 : 0,
-        x: isZoomed ? -4 : 0,
+    <div
+      className="relative shrink-0"
+      style={{
+        width: `${reservedWidth}px`,
+        height: `${reservedHeight}px`,
       }}
-      transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
-      className="relative w-full max-w-[372px] max-h-[calc(100vh-16px)] origin-center sm:max-w-[460px] sm:max-h-none md:max-w-[560px] lg:max-w-[640px] xl:max-w-[720px]"
     >
-      <div className="relative rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,#5d6167_0%,#2e3238_18%,#11151b_68%,#070a10_100%)] p-3 shadow-[0_28px_56px_rgba(0,0,0,0.5)] sm:rounded-[34px] sm:p-4 sm:shadow-[0_45px_100px_rgba(0,0,0,0.58)]">
-        <div className="absolute inset-[1px] rounded-[33px] bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_26%,transparent_56%,rgba(255,255,255,0.08)_82%,rgba(0,0,0,0.4))]" />
-        <div className="relative rounded-[22px] border border-black/40 bg-[linear-gradient(180deg,#2b2e33_0%,#141920_24%,#090d13_100%)] px-3 pb-4 pt-3 sm:rounded-[28px] sm:px-4 sm:pb-5 sm:pt-4 md:px-5 md:pb-6 md:pt-5">
+      <motion.div
+        layout
+        initial={false}
+        animate={{
+          scale: fitScale * cameraScale,
+          y: isMobileViewport ? (isZoomed ? -4 : 0) : isZoomed ? -10 : 0,
+          x: isMobileViewport ? 0 : isZoomed ? -6 : 0,
+        }}
+        transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
+        className="absolute left-1/2 top-1/2 origin-center -translate-x-1/2 -translate-y-1/2"
+        style={{
+          width: `${baseMachineWidth}px`,
+          minHeight: `${baseMachineHeight}px`,
+        }}
+      >
+        <div className="relative rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,#5d6167_0%,#2e3238_18%,#11151b_68%,#070a10_100%)] p-4 shadow-[0_45px_100px_rgba(0,0,0,0.58)]">
+          <div className="absolute inset-[1px] rounded-[33px] bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_26%,transparent_56%,rgba(255,255,255,0.08)_82%,rgba(0,0,0,0.4))]" />
+          <div className="relative rounded-[28px] border border-black/40 bg-[linear-gradient(180deg,#2b2e33_0%,#141920_24%,#090d13_100%)] px-5 pb-6 pt-5">
           <header className="mb-3 flex items-center justify-between rounded-[14px] border border-white/12 bg-[linear-gradient(180deg,#3a3e45,#191d22)] px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] sm:mb-4 sm:rounded-[16px] sm:px-4 sm:py-3">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#f4da8c] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] sm:h-11 sm:w-11 sm:rounded-xl md:h-12 md:w-12">
@@ -113,7 +179,10 @@ export function AtmMachine({
                 >
                   <ScreenGlow />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-full w-full origin-center scale-[0.9] sm:scale-[0.94] md:scale-100">
+                    <div
+                      className="h-full w-full origin-center"
+                      style={{ transform: `scale(${screenContentScale})` }}
+                    >
                       <AnimatePresence mode="wait">
                         {screen === "idle" && (
                           <motion.div
@@ -256,9 +325,10 @@ export function AtmMachine({
           </div>
 
           <div className="mx-auto mt-2 h-4 w-[86%] rounded-b-[16px] border border-white/5 bg-[linear-gradient(180deg,#1b1f25,#090d13)] sm:mt-3 sm:h-5 sm:rounded-b-[20px]" />
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
@@ -335,43 +405,66 @@ function KeypadPanel({ onCancel }: { onCancel: () => void }) {
         ))}
       </div>
       <div className="mt-1.5 grid grid-cols-3 gap-1.5 sm:mt-2 sm:gap-2">
-        <button
-          type="button"
+        <KeypadActionButton
+          color="red"
+          mobileLabel="C"
+          desktopLabel={atmContent.hardware.cancelLabel}
           onClick={onCancel}
-          className="group flex h-6 items-center justify-center overflow-hidden rounded-[6px] border border-black/40 bg-[#c84d37] px-2 py-1 font-black uppercase tracking-[0.02em] text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] transition hover:brightness-110 sm:h-7 sm:rounded-[7px] sm:px-2.5 sm:py-1.5 md:h-8 md:px-3 md:py-1.5"
-        >
-          <span className="text-[4px] font-black leading-none sm:hidden">C</span>
-          <span className="hidden px-1 text-[10px] font-black leading-none sm:inline sm:text-[11px]">
-            {atmContent.hardware.cancelLabel}
-          </span>
-        </button>
-        <FunctionKey color="bg-[#d0a52d]" mobileLabel="R" desktopLabel="Review" />
-        <FunctionKey color="bg-[#7dbd48]" mobileLabel="E" desktopLabel="Enter" />
+        />
+        <KeypadActionButton color="yellow" mobileLabel="R" desktopLabel="Review" />
+        <KeypadActionButton color="green" mobileLabel="E" desktopLabel="Enter" />
       </div>
     </div>
   );
 }
 
-function FunctionKey({
+function KeypadActionButton({
   color,
   mobileLabel,
   desktopLabel,
+  onClick,
 }: {
-  color: string;
+  color: "red" | "yellow" | "green";
   mobileLabel?: string;
   desktopLabel?: string;
+  onClick?: () => void;
 }) {
-  return (
-    <div
-      className={cn(
-        "flex h-7 items-center justify-center rounded-[7px] border border-black/40 text-[10px] font-black uppercase text-black shadow-[0_2px_4px_rgba(0,0,0,0.22)] sm:h-8 sm:text-[11px]",
-        color,
-      )}
-    >
-      {mobileLabel && <span className="sm:hidden">{mobileLabel}</span>}
-      {desktopLabel && <span className="hidden px-1 leading-none sm:inline">{desktopLabel}</span>}
-    </div>
+  const palette = {
+    red: "border-[#5b2118] bg-[linear-gradient(180deg,#e36a4f_0%,#c84d37_52%,#973523_100%)] hover:bg-[linear-gradient(180deg,#eb7759_0%,#d35840_52%,#a33c28_100%)] active:bg-[linear-gradient(180deg,#c84d37_0%,#aa3f2b_52%,#822817_100%)]",
+    yellow:
+      "border-[#70520c] bg-[linear-gradient(180deg,#f0c34b_0%,#d0a52d_52%,#987515_100%)] hover:bg-[linear-gradient(180deg,#f5cd5e_0%,#daaf38_52%,#a3801b_100%)] active:bg-[linear-gradient(180deg,#d0a52d_0%,#b08720_52%,#7e6010_100%)]",
+    green:
+      "border-[#3a6520] bg-[linear-gradient(180deg,#95d55d_0%,#7dbd48_52%,#5f9634_100%)] hover:bg-[linear-gradient(180deg,#a1de6f_0%,#89c953_52%,#68a53c_100%)] active:bg-[linear-gradient(180deg,#7dbd48_0%,#6aa13d_52%,#4f7e2b_100%)]",
+  } as const;
+  const sharedClassName = cn(
+    "relative flex h-6 w-full items-center justify-center overflow-hidden rounded-[6px] border px-1.5 py-1 text-center text-[10px] font-black uppercase leading-none text-black shadow-[0_2px_4px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.24)] transition duration-150 active:translate-y-[1px] active:shadow-[0_1px_2px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.16)] sm:h-7 sm:rounded-[7px] sm:px-2 sm:py-1.5 sm:text-[11px] md:h-8 md:text-[11px]",
+    palette[color],
+    onClick && "cursor-pointer",
   );
+
+  const content = (
+    <>
+      <span className="pointer-events-none absolute inset-x-[1px] top-[1px] h-[42%] rounded-[5px] bg-[linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0.02))] sm:rounded-[6px]" />
+      {mobileLabel && (
+        <span className="relative block font-black leading-none sm:hidden">{mobileLabel}</span>
+      )}
+      {desktopLabel && (
+        <span className="relative hidden truncate px-1 font-black leading-none sm:block">
+          {desktopLabel}
+        </span>
+      )}
+    </>
+  );
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={sharedClassName}>
+        {content}
+      </button>
+    );
+  }
+
+  return <div className={sharedClassName}>{content}</div>;
 }
 
 function SlotPanel({

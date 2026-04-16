@@ -30,11 +30,11 @@ function App() {
   };
 
   return (
-    <main className="relative h-screen overflow-hidden bg-[#020814] text-white">
+    <main className="relative min-h-[100dvh] overflow-x-hidden overflow-y-hidden bg-[#020814] text-white">
       <div className="pointer-events-none absolute inset-0 atm-stage-glow" />
       <div className="pointer-events-none absolute inset-0 atm-stage-grid opacity-40" />
 
-      <section className="relative flex h-screen items-center justify-center overflow-hidden px-3 py-3 sm:px-5 sm:py-5 lg:px-8 lg:py-6">
+      <section className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden px-3 py-3 sm:px-5 sm:py-5 lg:px-8 lg:py-6">
         <div className="relative flex w-full max-w-[1500px] items-center justify-center">
           <AtmMachine
             screen={screen}
