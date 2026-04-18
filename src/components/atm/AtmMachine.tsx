@@ -4,6 +4,8 @@ import {
   ArrowLeft,
   Banknote,
   CreditCard,
+  Eraser,
+  LockKeyhole,
   LoaderCircle,
   MousePointerClick,
   ShoppingCart,
@@ -23,6 +25,7 @@ type FlowScreen =
   | "welcome"
   | "services"
   | "balance-select"
+  | "pin-entry"
   | "balance-loading"
   | "balance-result"
   | "purchase";
@@ -32,6 +35,8 @@ type AtmMachineProps = {
   language: SupportedLanguage;
   isZoomed: boolean;
   balanceLoadingDurationMs: number;
+  pinDigits: string;
+  pinError: string | null;
   selectedCustomerId: number | null;
   selectedCustomer: Customer | null;
   onScreenClick: () => void;
@@ -43,6 +48,10 @@ type AtmMachineProps = {
   onSelectCustomer: (customerId: number) => void;
   onConfirmCustomerBalance: () => void;
   onBackToBalanceSelection: () => void;
+  onPinDigit: (digit: string) => void;
+  onPinClear: () => void;
+  onPinBackspace: () => void;
+  onPinConfirm: () => void;
   onCancel: () => void;
 };
 
@@ -51,6 +60,8 @@ export function AtmMachine({
   language,
   isZoomed,
   balanceLoadingDurationMs,
+  pinDigits,
+  pinError,
   selectedCustomerId,
   selectedCustomer,
   onScreenClick,
@@ -62,12 +73,17 @@ export function AtmMachine({
   onSelectCustomer,
   onConfirmCustomerBalance,
   onBackToBalanceSelection,
+  onPinDigit,
+  onPinClear,
+  onPinBackspace,
+  onPinConfirm,
   onCancel,
 }: AtmMachineProps) {
   const isArabic = language === "ar";
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const baseMachineWidth = 720;
   const baseMachineHeight = 1120;
+  const isPinEntry = screen === "pin-entry";
 
   useEffect(() => {
     function updateViewport() {
@@ -92,8 +108,18 @@ export function AtmMachine({
   }, []);
 
   const isMobileViewport = viewport.width > 0 && viewport.width < 640;
-  const cameraScale = isMobileViewport ? (isZoomed ? 0.98 : 0.84) : isZoomed ? 1.08 : 0.84;
-  const maxCameraScale = isMobileViewport ? 0.98 : 1.08;
+  const cameraScale = isPinEntry
+    ? isMobileViewport
+      ? 1.02
+      : 1.12
+    : isMobileViewport
+      ? isZoomed
+        ? 0.98
+        : 0.84
+      : isZoomed
+        ? 1.08
+        : 0.84;
+  const maxCameraScale = isPinEntry ? (isMobileViewport ? 1.02 : 1.12) : isMobileViewport ? 0.98 : 1.08;
   const viewportPadding = isMobileViewport ? 10 : 24;
   const availableWidth = Math.max(viewport.width - viewportPadding * 2, 280);
   const availableHeight = Math.max(viewport.height - viewportPadding * 2, 420);
@@ -134,7 +160,17 @@ export function AtmMachine({
         initial={false}
         animate={{
           scale: fitScale * cameraScale,
-          y: isMobileViewport ? (isZoomed ? -4 : 0) : isZoomed ? -10 : 0,
+          y: isPinEntry
+            ? isMobileViewport
+              ? 24
+              : 42
+            : isMobileViewport
+              ? isZoomed
+                ? -4
+                : 0
+              : isZoomed
+                ? -10
+                : 0,
           x: isMobileViewport ? 0 : isZoomed ? -6 : 0,
         }}
         transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
@@ -283,6 +319,24 @@ export function AtmMachine({
                             />
                           </motion.div>
                         )}
+                        {screen === "pin-entry" && selectedCustomer && (
+                          <motion.div
+                            key="pin-entry"
+                            initial={{ opacity: 0, x: 26 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -26 }}
+                            transition={{ duration: 0.38 }}
+                            className="absolute inset-0"
+                          >
+                            <PinEntryScreen
+                              language={language}
+                              customerName={selectedCustomer.name}
+                              pinDigits={pinDigits}
+                              pinError={pinError}
+                              onBack={onBackToBalanceSelection}
+                            />
+                          </motion.div>
+                        )}
                         {screen === "balance-loading" && (
                           <motion.div
                             key="balance-loading"
@@ -334,7 +388,14 @@ export function AtmMachine({
               icon={<Waves className="h-8 w-8 text-[#d8e7ff]" />}
               label={translate(language, "atm.contactlessLabel")}
             />
-            <KeypadPanel onCancel={onCancel} />
+            <KeypadPanel
+              mode={isPinEntry ? "pin" : "default"}
+              onCancel={onCancel}
+              onDigit={onPinDigit}
+              onPinClear={onPinClear}
+              onPinBackspace={onPinBackspace}
+              onPinConfirm={onPinConfirm}
+            />
             <div className="grid gap-3 sm:gap-4">
               <SlotPanel title={atmContent.hardware.cardSlot} accent="green" />
               <SlotPanel title={atmContent.hardware.receiptSlot} accent="neutral" />
@@ -405,24 +466,56 @@ function HardwarePanel({
   );
 }
 
-function KeypadPanel({ onCancel }: { onCancel: () => void }) {
+function KeypadPanel({
+  mode = "default",
+  onCancel,
+  onDigit,
+  onPinClear,
+  onPinBackspace,
+  onPinConfirm,
+}: {
+  mode?: "default" | "pin";
+  onCancel: () => void;
+  onDigit: (digit: string) => void;
+  onPinClear: () => void;
+  onPinBackspace: () => void;
+  onPinConfirm: () => void;
+}) {
   const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", ""];
+  const isPinMode = mode === "pin";
 
   return (
-    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-3 md:p-4">
+    <div
+      className={cn(
+        "rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-3 md:p-4",
+        isPinMode &&
+          "border-[#9fc2ff]/35 shadow-[0_0_0_1px_rgba(159,194,255,0.18),inset_0_1px_0_rgba(255,255,255,0.14),0_0_36px_rgba(72,121,220,0.16)]",
+      )}
+    >
       <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
         {keys.map((key, index) => (
-          <div
+          <button
             key={`${key}-${index}`}
+            type="button"
+            onClick={
+              isPinMode && key
+                ? () => {
+                    void playAtmClickSound();
+                    onDigit(key);
+                  }
+                : undefined
+            }
+            disabled={!isPinMode || !key}
             className={cn(
               "flex h-7 items-center justify-center rounded-[6px] border text-[10px] font-semibold sm:h-8 sm:rounded-[7px] sm:text-xs md:h-9 md:text-sm",
               key
                 ? "border-black/45 bg-[linear-gradient(180deg,#f5f5f7,#9aa1ac)] text-[#222831] shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                 : "border-transparent bg-transparent shadow-none",
+              isPinMode && key && "cursor-pointer transition hover:brightness-105 active:translate-y-[1px]",
             )}
           >
             {key}
-          </div>
+          </button>
         ))}
       </div>
       <div className="mt-1.5 grid grid-cols-3 gap-1.5 sm:mt-2 sm:gap-2">
@@ -430,10 +523,22 @@ function KeypadPanel({ onCancel }: { onCancel: () => void }) {
           color="red"
           mobileLabel="C"
           desktopLabel={atmContent.hardware.cancelLabel}
-          onClick={onCancel}
+          onClick={isPinMode ? onPinClear : onCancel}
         />
-        <KeypadActionButton color="yellow" mobileLabel="R" desktopLabel="Review" />
-        <KeypadActionButton color="green" mobileLabel="E" desktopLabel="Enter" />
+        <KeypadActionButton
+          color="yellow"
+          mobileLabel="R"
+          desktopLabel="Review"
+          onClick={isPinMode ? onPinBackspace : undefined}
+          icon={isPinMode ? <Eraser className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : undefined}
+        />
+        <KeypadActionButton
+          color="green"
+          mobileLabel="E"
+          desktopLabel="Enter"
+          onClick={isPinMode ? onPinConfirm : undefined}
+          icon={isPinMode ? <LockKeyhole className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : undefined}
+        />
       </div>
     </div>
   );
@@ -444,11 +549,13 @@ function KeypadActionButton({
   mobileLabel,
   desktopLabel,
   onClick,
+  icon,
 }: {
   color: "red" | "yellow" | "green";
   mobileLabel?: string;
   desktopLabel?: string;
   onClick?: () => void;
+  icon?: ReactNode;
 }) {
   const palette = {
     red: "border-[#5b2118] bg-[linear-gradient(180deg,#e36a4f_0%,#c84d37_52%,#973523_100%)] hover:bg-[linear-gradient(180deg,#eb7759_0%,#d35840_52%,#a33c28_100%)] active:bg-[linear-gradient(180deg,#c84d37_0%,#aa3f2b_52%,#822817_100%)]",
@@ -470,7 +577,8 @@ function KeypadActionButton({
         <span className="relative block font-black leading-none sm:hidden">{mobileLabel}</span>
       )}
       {desktopLabel && (
-        <span className="relative hidden truncate px-1 font-black leading-none sm:block">
+        <span className="relative hidden items-center justify-center gap-1 truncate px-1 font-black leading-none sm:flex">
+          {icon}
           {desktopLabel}
         </span>
       )}
@@ -771,6 +879,78 @@ function BalanceLoadingScreen({
             animate={{ width: "100%" }}
             transition={{ duration: durationMs / 1000, ease: "linear" }}
           />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PinEntryScreen({
+  language,
+  customerName,
+  pinDigits,
+  pinError,
+  onBack,
+}: {
+  language: SupportedLanguage;
+  customerName: string;
+  pinDigits: string;
+  pinError: string | null;
+  onBack: () => void;
+}) {
+  const isArabic = language === "ar";
+  const maskedDigits = Array.from({ length: 4 }, (_, index) =>
+    index < pinDigits.length ? "•" : "○",
+  );
+
+  return (
+    <div
+      className={cn(
+        "flex h-full flex-col overflow-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-5",
+        isArabic && "font-arabic",
+      )}
+      dir={isArabic ? "rtl" : "ltr"}
+    >
+      <div className={cn("flex items-start", isArabic ? "justify-start" : "justify-end")}>
+        <AtmActionButton
+          type="button"
+          tone="ghost"
+          className="min-w-[92px] sm:min-w-[104px]"
+          onClick={onBack}
+        >
+          <span className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            {translate(language, "atm.backButton")}
+          </span>
+        </AtmActionButton>
+      </div>
+
+      <div className="flex flex-1 flex-col justify-center">
+        <div className="mx-auto w-full max-w-[320px] rounded-[18px] border border-white/10 bg-[linear-gradient(180deg,rgba(7,21,44,0.78),rgba(4,11,24,0.92))] px-4 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:max-w-[360px] sm:px-5 sm:py-6 md:max-w-[410px]">
+          <p className="text-[1rem] font-bold text-[#f4f8ff] sm:text-[1.1rem] md:text-[1.22rem]">
+            {translate(language, "atm.pinEntry.title")}
+          </p>
+          <p className="mt-2 text-[0.85rem] text-[#d7e6ff] sm:text-[0.92rem] md:text-[0.98rem]">
+            {customerName}
+          </p>
+          <p className="mt-2 text-[0.78rem] text-[#97b8ef] sm:text-[0.84rem] md:text-[0.9rem]">
+            {translate(language, "atm.pinEntry.subtitle")}
+          </p>
+
+          <div className="mt-5 flex items-center justify-center gap-2 sm:gap-3">
+            {maskedDigits.map((digit, index) => (
+              <div
+                key={`${digit}-${index}`}
+                className="flex h-11 w-11 items-center justify-center rounded-[14px] border border-[#7caefc]/22 bg-[linear-gradient(180deg,rgba(17,50,101,0.72),rgba(8,25,50,0.74))] text-lg font-bold text-[#f7fbff] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:h-12 sm:w-12 sm:text-xl"
+              >
+                {digit}
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-4 min-h-[1.25rem] text-[0.82rem] font-medium text-[#ffb2a8] sm:text-[0.88rem]">
+            {pinError ? translate(language, "atm.pinEntry.error") : "\u00A0"}
+          </p>
         </div>
       </div>
     </div>

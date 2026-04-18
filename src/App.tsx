@@ -14,6 +14,7 @@ type FlowScreen =
   | "welcome"
   | "services"
   | "balance-select"
+  | "pin-entry"
   | "balance-loading"
   | "balance-result"
   | "purchase";
@@ -24,6 +25,8 @@ function App() {
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
     customers[0]?.id ?? null,
   );
+  const [pinDigits, setPinDigits] = useState("");
+  const [pinError, setPinError] = useState<string | null>(null);
   const [balanceLoadingDurationMs, setBalanceLoadingDurationMs] = useState(4200);
   const balanceLoadingTimeoutRef = useRef<number | null>(null);
   const balanceLoadingSessionRef = useRef(0);
@@ -31,6 +34,11 @@ function App() {
   const isZoomed = screen !== "idle";
   const selectedCustomer =
     customers.find((customer) => customer.id === selectedCustomerId) ?? null;
+
+  const resetPinState = () => {
+    setPinDigits("");
+    setPinError(null);
+  };
 
   const clearBalanceLoading = () => {
     balanceLoadingSessionRef.current += 1;
@@ -51,6 +59,7 @@ function App() {
 
   const handleCancel = () => {
     clearBalanceLoading();
+    resetPinState();
     setLanguage("ar");
     setSelectedCustomerId(customers[0]?.id ?? null);
     setScreen("idle");
@@ -77,39 +86,70 @@ function App() {
             onPurchaseAction={() => setScreen("purchase")}
             onBackToServices={() => {
               clearBalanceLoading();
+              resetPinState();
               setScreen("services");
             }}
             selectedCustomer={selectedCustomer}
             balanceLoadingDurationMs={balanceLoadingDurationMs}
             selectedCustomerId={selectedCustomerId}
+            pinDigits={pinDigits}
+            pinError={pinError}
             onSelectCustomer={setSelectedCustomerId}
-            onConfirmCustomerBalance={async () => {
+            onConfirmCustomerBalance={() => {
               if (selectedCustomerId !== null) {
-                clearBalanceLoading();
-                setScreen("balance-loading");
-
-                const currentSession = balanceLoadingSessionRef.current + 1;
-                balanceLoadingSessionRef.current = currentSession;
-
-                const durationPromise = getCashWithdrawalDurationMs();
-                void playCashWithdrawalSound();
-                const durationMs = await durationPromise;
-                setBalanceLoadingDurationMs(durationMs);
-
-                if (balanceLoadingSessionRef.current !== currentSession) {
-                  return;
-                }
-
-                balanceLoadingTimeoutRef.current = window.setTimeout(() => {
-                  if (balanceLoadingSessionRef.current === currentSession) {
-                    setScreen("balance-result");
-                  }
-                }, durationMs);
+                resetPinState();
+                setScreen("pin-entry");
               }
             }}
             onBackToBalanceSelection={() => {
               clearBalanceLoading();
+              resetPinState();
               setScreen("balance-select");
+            }}
+            onPinDigit={(digit) => {
+              setPinError(null);
+              setPinDigits((current) => (current.length < 4 ? `${current}${digit}` : current));
+            }}
+            onPinClear={() => {
+              setPinDigits("");
+              setPinError(null);
+            }}
+            onPinBackspace={() => {
+              setPinError(null);
+              setPinDigits((current) => current.slice(0, -1));
+            }}
+            onPinConfirm={async () => {
+              if (!selectedCustomer) {
+                return;
+              }
+
+              if (pinDigits.length !== 4 || pinDigits !== selectedCustomer.password) {
+                setPinDigits("");
+                setPinError("invalid");
+                return;
+              }
+
+              clearBalanceLoading();
+              resetPinState();
+              setScreen("balance-loading");
+
+              const currentSession = balanceLoadingSessionRef.current + 1;
+              balanceLoadingSessionRef.current = currentSession;
+
+              const durationPromise = getCashWithdrawalDurationMs();
+              void playCashWithdrawalSound();
+              const durationMs = await durationPromise;
+              setBalanceLoadingDurationMs(durationMs);
+
+              if (balanceLoadingSessionRef.current !== currentSession) {
+                return;
+              }
+
+              balanceLoadingTimeoutRef.current = window.setTimeout(() => {
+                if (balanceLoadingSessionRef.current === currentSession) {
+                  setScreen("balance-result");
+                }
+              }, durationMs);
             }}
             onCancel={handleCancel}
           />
