@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, Check, ChevronDown, UserRound } from "lucide-react";
+import { ArrowLeft, Check, ChevronDown, Search, UserRound } from "lucide-react";
 import { AtmActionButton } from "@/components/atm/AtmActionButton";
 import type { Customer } from "@/data/customers";
 import { translate, type SupportedLanguage } from "@/content/atmContent";
@@ -25,12 +25,25 @@ export function BalanceCustomerSelectScreen({
 }: BalanceCustomerSelectScreenProps) {
   const isArabic = language === "ar";
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const selectedCustomer = useMemo(
     () => customers.find((customer) => customer.id === selectedCustomerId) ?? null,
     [customers, selectedCustomerId],
   );
+  const filteredCustomers = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+
+    if (!normalizedSearch) {
+      return customers;
+    }
+
+    return customers.filter((customer) =>
+      customer.name.toLowerCase().includes(normalizedSearch),
+    );
+  }, [customers, searchTerm]);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -43,6 +56,18 @@ export function BalanceCustomerSelectScreen({
     document.addEventListener("mousedown", handlePointerDown);
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, []);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      searchInputRef.current?.focus();
+    }, 10);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isOpen]);
 
   return (
     <div
@@ -77,7 +102,15 @@ export function BalanceCustomerSelectScreen({
               type="button"
               onClick={() => {
                 void playAtmClickSound();
-                setIsOpen((open) => !open);
+                setIsOpen((open) => {
+                  const nextOpen = !open;
+
+                  if (!nextOpen) {
+                    setSearchTerm("");
+                  }
+
+                  return nextOpen;
+                });
               }}
               className={cn(
                 "flex h-12 w-full items-center rounded-[16px] border border-[#6ea7ff]/35 bg-[linear-gradient(180deg,rgba(12,33,67,0.98),rgba(6,18,38,0.98))] text-sm text-[#f4f8ff] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none transition hover:border-[#87b7ff]/55 focus-visible:border-[#8db9ff] focus-visible:shadow-[0_0_0_1px_rgba(141,185,255,0.4)] sm:h-13 sm:text-[15px] md:h-14 md:rounded-[18px] md:text-base",
@@ -100,8 +133,26 @@ export function BalanceCustomerSelectScreen({
 
             {isOpen && (
               <div className="absolute inset-x-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-[16px] border border-[#6ea7ff]/30 bg-[linear-gradient(180deg,rgba(8,24,48,0.98),rgba(4,12,26,0.99))] shadow-[0_18px_32px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.05)] md:top-[calc(100%+10px)] md:rounded-[18px]">
+                <div className="border-b border-white/8 p-1.5 sm:p-2">
+                  <div className="flex items-center gap-2 rounded-[12px] border border-[#6ea7ff]/25 bg-[linear-gradient(180deg,rgba(10,27,53,0.96),rgba(6,18,37,0.98))] px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                    <Search className="h-4 w-4 shrink-0 text-[#8fb9ff]" />
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      value={searchTerm}
+                      onChange={(event) => setSearchTerm(event.target.value)}
+                      placeholder={
+                        isArabic ? "ابحث عن اسم العميل" : "Search customer name"
+                      }
+                      className={cn(
+                        "w-full border-0 bg-transparent text-sm text-[#f4f8ff] outline-none placeholder:text-[#89a8d8]/70",
+                        isArabic && "text-right",
+                      )}
+                    />
+                  </div>
+                </div>
                 <div className="atm-scrollbar max-h-[146px] overflow-y-auto p-1.5 sm:max-h-[160px] sm:p-2 md:max-h-[168px]">
-                  {customers.map((customer) => {
+                  {filteredCustomers.map((customer) => {
                     const isSelected = customer.id === selectedCustomerId;
 
                     return (
@@ -111,6 +162,7 @@ export function BalanceCustomerSelectScreen({
                         onClick={() => {
                           void playAtmClickSound();
                           onSelectCustomer(customer.id);
+                          setSearchTerm("");
                           setIsOpen(false);
                         }}
                         className={cn(
@@ -126,6 +178,11 @@ export function BalanceCustomerSelectScreen({
                       </button>
                     );
                   })}
+                  {filteredCustomers.length === 0 && (
+                    <div className="rounded-[12px] px-3 py-4 text-center text-xs text-[#b7ccef] sm:text-sm">
+                      {isArabic ? "لا توجد نتائج مطابقة" : "No matching customers found"}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
