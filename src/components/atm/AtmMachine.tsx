@@ -4,8 +4,6 @@ import {
   ArrowLeft,
   Banknote,
   CreditCard,
-  Eraser,
-  LockKeyhole,
   LoaderCircle,
   MousePointerClick,
   ShoppingCart,
@@ -485,33 +483,29 @@ function KeypadPanel({
   const isPinMode = mode === "pin";
 
   return (
-    <div
-      className={cn(
-        "rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-3 md:p-4",
-        isPinMode &&
-          "border-[#9fc2ff]/35 shadow-[0_0_0_1px_rgba(159,194,255,0.18),inset_0_1px_0_rgba(255,255,255,0.14),0_0_36px_rgba(72,121,220,0.16)]",
-      )}
-    >
+    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-3 md:p-4">
       <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
         {keys.map((key, index) => (
           <button
             key={`${key}-${index}`}
             type="button"
-            onClick={
-              isPinMode && key
-                ? () => {
-                    void playAtmClickSound();
-                    onDigit(key);
-                  }
-                : undefined
-            }
-            disabled={!isPinMode || !key}
+            onClick={() => {
+              if (!key) {
+                return;
+              }
+
+              void playAtmClickSound();
+
+              if (isPinMode) {
+                onDigit(key);
+              }
+            }}
             className={cn(
-              "flex h-7 items-center justify-center rounded-[6px] border text-[10px] font-semibold sm:h-8 sm:rounded-[7px] sm:text-xs md:h-9 md:text-sm",
+              "flex h-7 items-center justify-center rounded-[6px] border text-[10px] font-semibold transition active:translate-y-[1px] sm:h-8 sm:rounded-[7px] sm:text-xs md:h-9 md:text-sm",
               key
                 ? "border-black/45 bg-[linear-gradient(180deg,#f5f5f7,#9aa1ac)] text-[#222831] shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                 : "border-transparent bg-transparent shadow-none",
-              isPinMode && key && "cursor-pointer transition hover:brightness-105 active:translate-y-[1px]",
+              key && "cursor-pointer hover:brightness-105",
             )}
           >
             {key}
@@ -530,14 +524,12 @@ function KeypadPanel({
           mobileLabel="R"
           desktopLabel="Review"
           onClick={isPinMode ? onPinBackspace : undefined}
-          icon={isPinMode ? <Eraser className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : undefined}
         />
         <KeypadActionButton
           color="green"
           mobileLabel="E"
           desktopLabel="Enter"
           onClick={isPinMode ? onPinConfirm : undefined}
-          icon={isPinMode ? <LockKeyhole className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : undefined}
         />
       </div>
     </div>
@@ -549,13 +541,11 @@ function KeypadActionButton({
   mobileLabel,
   desktopLabel,
   onClick,
-  icon,
 }: {
   color: "red" | "yellow" | "green";
   mobileLabel?: string;
   desktopLabel?: string;
   onClick?: () => void;
-  icon?: ReactNode;
 }) {
   const palette = {
     red: "border-[#5b2118] bg-[linear-gradient(180deg,#e36a4f_0%,#c84d37_52%,#973523_100%)] hover:bg-[linear-gradient(180deg,#eb7759_0%,#d35840_52%,#a33c28_100%)] active:bg-[linear-gradient(180deg,#c84d37_0%,#aa3f2b_52%,#822817_100%)]",
@@ -577,8 +567,7 @@ function KeypadActionButton({
         <span className="relative block font-black leading-none sm:hidden">{mobileLabel}</span>
       )}
       {desktopLabel && (
-        <span className="relative hidden items-center justify-center gap-1 truncate px-1 font-black leading-none sm:flex">
-          {icon}
+        <span className="relative hidden truncate px-1 font-black leading-none sm:block">
           {desktopLabel}
         </span>
       )}
@@ -600,7 +589,17 @@ function KeypadActionButton({
     );
   }
 
-  return <div className={sharedClassName}>{content}</div>;
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        void playAtmClickSound();
+      }}
+      className={cn(sharedClassName, "cursor-pointer")}
+    >
+      {content}
+    </button>
+  );
 }
 
 function SlotPanel({
