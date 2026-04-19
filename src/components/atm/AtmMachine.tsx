@@ -79,7 +79,7 @@ export function AtmMachine({
   const isArabic = language === "ar";
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const baseMachineWidth = 720;
-  const baseMachineHeight = 1210;
+  const baseMachineHeight = 1260;
   const isPinEntry = screen === "pin-entry";
 
   useEffect(() => {
