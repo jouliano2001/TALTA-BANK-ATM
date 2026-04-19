@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -7,7 +7,6 @@ import {
   LoaderCircle,
   MousePointerClick,
   ShoppingCart,
-  Waves,
 } from "lucide-react";
 import { AtmActionButton } from "@/components/atm/AtmActionButton";
 import { BalanceCustomerSelectScreen } from "@/components/atm/screens/BalanceCustomerSelectScreen";
@@ -80,7 +79,7 @@ export function AtmMachine({
   const isArabic = language === "ar";
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const baseMachineWidth = 720;
-  const baseMachineHeight = 1120;
+  const baseMachineHeight = 1210;
   const isPinEntry = screen === "pin-entry";
 
   useEffect(() => {
@@ -379,13 +378,8 @@ export function AtmMachine({
           <motion.div
             animate={{ opacity: isZoomed ? 1 : 0.88, y: isZoomed ? 0 : 14 }}
             transition={{ duration: 0.6, delay: isZoomed ? 0.2 : 0 }}
-            className="mt-3 grid grid-cols-[0.92fr_1.18fr_0.92fr] gap-2 sm:mt-5 sm:grid-cols-[1fr_1.25fr_1fr] sm:gap-3 md:grid-cols-[1fr_1.4fr_1fr] md:gap-4"
+            className="mt-4 grid grid-cols-[1.5fr_0.95fr] gap-2 sm:mt-6 sm:grid-cols-[1.6fr_0.95fr] sm:gap-3 md:grid-cols-[1.72fr_0.92fr] md:gap-4"
           >
-            <HardwarePanel
-              title={atmContent.hardware.contactless}
-              icon={<Waves className="h-8 w-8 text-[#d8e7ff]" />}
-              label={translate(language, "atm.contactlessLabel")}
-            />
             <KeypadPanel
               mode={isPinEntry ? "pin" : "default"}
               onCancel={onCancel}
@@ -438,32 +432,6 @@ function MachineSideButtons({ side }: { side: "left" | "right" }) {
   );
 }
 
-function HardwarePanel({
-  title,
-  icon,
-  label,
-}: {
-  title: string;
-  icon: ReactNode;
-  label: string;
-}) {
-  return (
-    <div className="flex min-h-[88px] flex-col justify-between rounded-[14px] border border-white/12 bg-[linear-gradient(180deg,#5a6470,#2b343e)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:min-h-[105px] sm:rounded-[16px] sm:p-3 md:min-h-[122px] md:p-4">
-      <span className="text-[8px] font-semibold uppercase tracking-[0.15em] text-white/70 sm:text-[9px] md:text-[10px] md:tracking-[0.2em]">
-        {title}
-      </span>
-      <div className="flex flex-col items-center gap-2 text-center">
-        <div className="flex h-11 w-full items-center justify-center rounded-[12px] border border-white/8 bg-black/22 sm:h-12 sm:rounded-[14px] md:h-14">
-          {icon}
-        </div>
-        <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/55 sm:text-[9px] md:text-[10px] md:tracking-[0.16em]">
-          {label}
-        </span>
-      </div>
-    </div>
-  );
-}
-
 function KeypadPanel({
   mode = "default",
   onCancel,
@@ -483,8 +451,8 @@ function KeypadPanel({
   const isPinMode = mode === "pin";
 
   return (
-    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-3 md:p-4">
-      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-4 md:p-5">
+      <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
         {keys.map((key, index) => (
           <button
             key={`${key}-${index}`}
@@ -501,7 +469,7 @@ function KeypadPanel({
               }
             }}
             className={cn(
-              "flex h-7 items-center justify-center rounded-[6px] border text-[10px] font-semibold transition active:translate-y-[1px] sm:h-8 sm:rounded-[7px] sm:text-xs md:h-9 md:text-sm",
+              "flex h-8 items-center justify-center rounded-[7px] border text-[11px] font-semibold transition active:translate-y-[1px] sm:h-9 sm:rounded-[8px] sm:text-sm md:h-11 md:text-[15px]",
               key
                 ? "border-black/45 bg-[linear-gradient(180deg,#f5f5f7,#9aa1ac)] text-[#222831] shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                 : "border-transparent bg-transparent shadow-none",
@@ -512,22 +480,22 @@ function KeypadPanel({
           </button>
         ))}
       </div>
-      <div className="mt-1.5 grid grid-cols-3 gap-1.5 sm:mt-2 sm:gap-2">
+      <div className="mt-2 grid grid-cols-3 gap-2 sm:mt-2.5 sm:gap-2.5">
         <KeypadActionButton
           color="red"
-          mobileLabel="C"
+          mobileLabel={atmContent.hardware.cancelLabel}
           desktopLabel={atmContent.hardware.cancelLabel}
           onClick={isPinMode ? onPinClear : onCancel}
         />
         <KeypadActionButton
           color="yellow"
-          mobileLabel="R"
+          mobileLabel="Review"
           desktopLabel="Review"
           onClick={isPinMode ? onPinBackspace : undefined}
         />
         <KeypadActionButton
           color="green"
-          mobileLabel="E"
+          mobileLabel="Enter"
           desktopLabel="Enter"
           onClick={isPinMode ? onPinConfirm : undefined}
         />
@@ -555,7 +523,7 @@ function KeypadActionButton({
       "border-[#3a6520] bg-[linear-gradient(180deg,#95d55d_0%,#7dbd48_52%,#5f9634_100%)] hover:bg-[linear-gradient(180deg,#a1de6f_0%,#89c953_52%,#68a53c_100%)] active:bg-[linear-gradient(180deg,#7dbd48_0%,#6aa13d_52%,#4f7e2b_100%)]",
   } as const;
   const sharedClassName = cn(
-    "relative flex h-6 w-full items-center justify-center overflow-hidden rounded-[6px] border px-1.5 py-1 text-center text-[10px] font-black uppercase leading-none text-black shadow-[0_2px_4px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.24)] transition duration-150 active:translate-y-[1px] active:shadow-[0_1px_2px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.16)] sm:h-7 sm:rounded-[7px] sm:px-2 sm:py-1.5 sm:text-[11px] md:h-8 md:text-[11px]",
+    "relative flex h-7 w-full items-center justify-center overflow-hidden rounded-[7px] border px-2 py-1 text-center text-[11px] font-black uppercase leading-none text-black shadow-[0_2px_4px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.24)] transition duration-150 active:translate-y-[1px] active:shadow-[0_1px_2px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.16)] sm:h-8 sm:rounded-[8px] sm:px-2.5 sm:py-1.5 sm:text-[12px] md:h-10 md:text-[13px]",
     palette[color],
     onClick && "cursor-pointer",
   );
@@ -564,7 +532,9 @@ function KeypadActionButton({
     <>
       <span className="pointer-events-none absolute inset-x-[1px] top-[1px] h-[42%] rounded-[5px] bg-[linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0.02))] sm:rounded-[6px]" />
       {mobileLabel && (
-        <span className="relative block font-black leading-none sm:hidden">{mobileLabel}</span>
+        <span className="relative block truncate px-1 font-black leading-none sm:hidden">
+          {mobileLabel}
+        </span>
       )}
       {desktopLabel && (
         <span className="relative hidden truncate px-1 font-black leading-none sm:block">
@@ -936,7 +906,7 @@ function PinEntryScreen({
             {translate(language, "atm.pinEntry.subtitle")}
           </p>
 
-          <div className="mt-5 flex items-center justify-center gap-2 sm:gap-3">
+          <div className="mt-5 flex items-center justify-center gap-2 sm:gap-3" dir="ltr">
             {maskedDigits.map((digit, index) => (
               <div
                 key={`${digit}-${index}`}
