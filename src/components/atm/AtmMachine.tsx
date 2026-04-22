@@ -211,7 +211,7 @@ export function AtmMachine({
                 <div
                   onClick={screen === "idle" ? onScreenClick : undefined}
                   className={cn(
-                    "relative flex aspect-[1.18/1] w-full overflow-hidden rounded-[10px] border border-[#18325f] bg-[radial-gradient(circle_at_top,rgba(33,70,129,0.45),transparent_38%),linear-gradient(180deg,#04142f_0%,#071021_54%,#07172c_100%)] text-left shadow-[inset_0_0_22px_rgba(87,145,255,0.12)] sm:aspect-[1.24/1] md:aspect-[1.34/1] sm:rounded-[12px]",
+                    "relative flex aspect-[1.28/1] w-full overflow-hidden rounded-[10px] border border-[#18325f] bg-[radial-gradient(circle_at_top,rgba(33,70,129,0.45),transparent_38%),linear-gradient(180deg,#04142f_0%,#071021_54%,#07172c_100%)] text-left shadow-[inset_0_0_22px_rgba(87,145,255,0.12)] sm:aspect-[1.34/1] md:aspect-[1.44/1] sm:rounded-[12px]",
                     screen === "idle" &&
                       "cursor-pointer transition duration-300 hover:border-[#6ca9ff] hover:shadow-[0_0_0_1px_rgba(108,169,255,0.32),inset_0_0_34px_rgba(95,155,255,0.18)]",
                   )}
@@ -378,7 +378,7 @@ export function AtmMachine({
           <motion.div
             animate={{ opacity: isZoomed ? 1 : 0.88, y: isZoomed ? 0 : 14 }}
             transition={{ duration: 0.6, delay: isZoomed ? 0.2 : 0 }}
-            className="mt-4 grid grid-cols-[1.5fr_0.95fr] gap-2 sm:mt-6 sm:grid-cols-[1.6fr_0.95fr] sm:gap-3 md:grid-cols-[1.72fr_0.92fr] md:gap-4"
+            className="mt-4 grid grid-cols-[1.5fr_0.98fr] items-stretch gap-2 sm:mt-6 sm:grid-cols-[1.6fr_0.98fr] sm:gap-3 md:grid-cols-[1.72fr_0.95fr] md:gap-4"
           >
             <KeypadPanel
               mode={isPinEntry ? "pin" : "default"}
@@ -388,7 +388,7 @@ export function AtmMachine({
               onPinBackspace={onPinBackspace}
               onPinConfirm={onPinConfirm}
             />
-            <div className="grid gap-3 sm:gap-4">
+            <div className="grid auto-rows-fr gap-3 sm:gap-4">
               <SlotPanel title={atmContent.hardware.cardSlot} accent="green" />
               <SlotPanel title={atmContent.hardware.receiptSlot} accent="neutral" />
             </div>
@@ -451,8 +451,8 @@ function KeypadPanel({
   const isPinMode = mode === "pin";
 
   return (
-    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-4 md:p-5">
-      <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#5c6671,#2d3640)] p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:rounded-[18px] sm:p-4 md:p-5">
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
         {keys.map((key, index) => (
           <button
             key={`${key}-${index}`}
@@ -469,7 +469,7 @@ function KeypadPanel({
               }
             }}
             className={cn(
-              "flex h-8 items-center justify-center rounded-[7px] border text-[11px] font-semibold transition active:translate-y-[1px] sm:h-9 sm:rounded-[8px] sm:text-sm md:h-11 md:text-[15px]",
+              "flex h-11 items-center justify-center rounded-[9px] border text-[14px] font-semibold transition active:translate-y-[1px] sm:h-12 sm:rounded-[10px] sm:text-[15px] md:h-14 md:text-[17px]",
               key
                 ? "border-black/45 bg-[linear-gradient(180deg,#f5f5f7,#9aa1ac)] text-[#222831] shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                 : "border-transparent bg-transparent shadow-none",
@@ -480,7 +480,7 @@ function KeypadPanel({
           </button>
         ))}
       </div>
-      <div className="mt-2 grid grid-cols-3 gap-2 sm:mt-2.5 sm:gap-2.5">
+      <div className="mt-3 grid grid-cols-3 gap-2.5 sm:mt-3.5 sm:gap-3">
         <KeypadActionButton
           color="red"
           mobileLabel={atmContent.hardware.cancelLabel}
@@ -523,7 +523,7 @@ function KeypadActionButton({
       "border-[#3a6520] bg-[linear-gradient(180deg,#95d55d_0%,#7dbd48_52%,#5f9634_100%)] hover:bg-[linear-gradient(180deg,#a1de6f_0%,#89c953_52%,#68a53c_100%)] active:bg-[linear-gradient(180deg,#7dbd48_0%,#6aa13d_52%,#4f7e2b_100%)]",
   } as const;
   const sharedClassName = cn(
-    "relative flex h-7 w-full items-center justify-center overflow-hidden rounded-[7px] border px-2 py-1 text-center text-[11px] font-black uppercase leading-none text-black shadow-[0_2px_4px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.24)] transition duration-150 active:translate-y-[1px] active:shadow-[0_1px_2px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.16)] sm:h-8 sm:rounded-[8px] sm:px-2.5 sm:py-1.5 sm:text-[12px] md:h-10 md:text-[13px]",
+    "relative flex h-9 w-full items-center justify-center overflow-hidden rounded-[9px] border px-2.5 py-1.5 text-center text-[12px] font-black uppercase leading-none text-black shadow-[0_2px_4px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.24)] transition duration-150 active:translate-y-[1px] active:shadow-[0_1px_2px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.16)] sm:h-10 sm:rounded-[10px] sm:px-3 sm:py-2 sm:text-[13px] md:h-12 md:text-[14px]",
     palette[color],
     onClick && "cursor-pointer",
   );
@@ -580,15 +580,15 @@ function SlotPanel({
   accent: "green" | "neutral";
 }) {
   return (
-    <div className="rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#59626d,#2a323b)] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:p-4">
-      <div className="mb-2 text-center text-[9px] font-semibold uppercase tracking-[0.2em] text-white/72 sm:text-[10px]">
+    <div className="flex h-full flex-col justify-center rounded-[16px] border border-white/12 bg-[linear-gradient(180deg,#59626d,#2a323b)] p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] sm:p-4">
+      <div className="mb-2.5 text-center text-[9px] font-semibold uppercase tracking-[0.2em] text-white/72 sm:text-[10px]">
         {title}
       </div>
-      <div className="rounded-[10px] border border-black/45 bg-black/38 p-2 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)]">
-        <div className="h-5 rounded-full bg-[linear-gradient(180deg,#05070a,#1a1e25)] shadow-[inset_0_1px_2px_rgba(255,255,255,0.08)]" />
+      <div className="rounded-[10px] border border-black/45 bg-black/38 p-2.5 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)]">
+        <div className="h-6 rounded-full bg-[linear-gradient(180deg,#05070a,#1a1e25)] shadow-[inset_0_1px_2px_rgba(255,255,255,0.08)] sm:h-7" />
         <div
           className={cn(
-            "mx-auto mt-1.5 h-1.5 w-10 rounded-full",
+            "mx-auto mt-2 h-1.5 w-10 rounded-full",
             accent === "green"
               ? "bg-[#49cb60] shadow-[0_0_12px_rgba(73,203,96,0.65)]"
               : "bg-white/18",
